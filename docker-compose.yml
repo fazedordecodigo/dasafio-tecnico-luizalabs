@@ -1,0 +1,41 @@
+services:
+  postgress:
+    image: postgres:alpine
+    restart: always
+    container_name: postgres
+    environment:
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_DB: ${POSTGRES_DB}
+    ports:
+      - "5432:5432"
+    volumes:
+      - bd-data:/var/lib/postgresql/data
+    networks:
+      - favorites-network
+  adminer:
+    image: adminer
+    restart: always
+    container_name: adminer
+    ports:
+      - 8081:8080
+    networks:
+      - favorites-network
+  api:
+    build:
+      context: .
+      dockerfile: ./dockerfile
+      args:
+        - DATABASE_URL=${DATABASE_URL}
+    image: favorites-api:local
+    container_name: favorites-api
+    ports:
+      - 3000:3000
+    networks:
+      - favorites-network
+
+networks:
+  favorites-network:
+    driver: bridge
+volumes:
+  bd-data:
