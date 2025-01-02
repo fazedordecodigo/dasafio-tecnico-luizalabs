@@ -19,10 +19,7 @@ import { USER_SERVICE } from 'src/adapters/constants';
         CustomersService,
         FavoritesService,
         ProductsService,
-        {
-            provide: USER_SERVICE,
-            useClass: UsersService,
-        }
+        USER_SERVICE
     ]
 })
 export class PortsModule {}
