@@ -8,10 +8,12 @@ import { AuthGuard } from './Guards/auth.guard';
 import { CustomersController } from './Controllers/customers.controller';
 import { ProductsController } from './Controllers/products.controller';
 import { FavoritesController } from './Controllers/favorites.controller';
+import { PortsModule } from 'src/ports/ports.module';
 
 @Module({
   controllers: [AuthController, CustomersController, ProductsController, FavoritesController],
   imports: [
+    PortsModule,
     JwtModule.register({
       global: true,
       secret: jwtConstants.secret,

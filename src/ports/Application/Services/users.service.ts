@@ -1,9 +1,10 @@
 import { Injectable } from '@nestjs/common';
+import { UsersServiceProtocol } from '../Protocols/users.service.protocol';
 
 export type User = any;
 
 @Injectable()
-export class UsersService {
+export class UsersService implements UsersServiceProtocol {
   private readonly users = [
     {
       userId: 1,
