@@ -10,7 +10,7 @@ services:
     ports:
       - "5432:5432"
     volumes:
-      - bd-data:/var/lib/postgresql/data
+      - favorites-data:/var/lib/postgresql/data
     networks:
       - favorites-network
   adminer:
@@ -38,4 +38,4 @@ networks:
   favorites-network:
     driver: bridge
 volumes:
-  bd-data:
+  favorites-data:
