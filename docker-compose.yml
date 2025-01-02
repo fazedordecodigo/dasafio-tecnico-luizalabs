@@ -1,5 +1,5 @@
 services:
-  postgress:
+  postgres:
     image: postgres:alpine
     restart: always
     container_name: postgres
@@ -18,7 +18,7 @@ services:
     restart: always
     container_name: adminer
     ports:
-      - 8081:8080
+      - 8080:8080
     networks:
       - favorites-network
   api:
