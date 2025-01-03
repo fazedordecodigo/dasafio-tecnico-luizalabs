@@ -1,5 +1,4 @@
 import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
-import { UUID } from 'node:crypto';
 import { CreateCustomerDto } from 'src/ports/Application/dto/create-customer.dto';
 import { UpdateCustomerDto } from 'src/ports/Application/dto/update-customer.dto';
 import { CustomersService } from 'src/ports/Application/Services/customers.service';
@@ -19,17 +18,17 @@ export class CustomersController {
   }
 
   @Get(':id')
-  findOne(@Param('id') id: UUID) {
+  findOne(@Param('id') id: string) {
     return this.customersService.findOne(+id);
   }
 
   @Patch(':id')
-  update(@Param('id') id: UUID, @Body() updateCustomerDto: UpdateCustomerDto) {
+  update(@Param('id') id: string, @Body() updateCustomerDto: UpdateCustomerDto) {
     return this.customersService.update(+id, updateCustomerDto);
   }
 
   @Delete(':id')
-  remove(@Param('id') id: UUID) {
+  remove(@Param('id') id: string) {
     return this.customersService.remove(+id);
   }
 }
