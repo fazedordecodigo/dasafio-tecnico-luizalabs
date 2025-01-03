@@ -17,7 +17,7 @@ model User {
   id        String  @id
   email     String  @unique
   password  String
-  profile   String
+  role      String
   customer  Customer?
   createdAt DateTime
   updatedAt DateTime?
