@@ -6,4 +6,10 @@ export abstract class Entity {
     updatedAt: Date | null;
     isDeleted: boolean = false;
     deletedAt: Date | null;
+
+    constructor(id?: string) {
+        if (id) {
+            this.id = id;
+        }
+    }
 }
