@@ -1,34 +1,65 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, BadRequestException, Inject } from '@nestjs/common';
 import { CreateCustomerDto } from 'src/ports/Application/dto/create-customer.dto';
 import { UpdateCustomerDto } from 'src/ports/Application/dto/update-customer.dto';
-import { CustomersService } from 'src/ports/Application/Services/customers.service';
+import { CustomersServiceProtocol } from 'src/ports/Application/Protocols/customers.service.protocol';
+import { CUSTOMER_SERVICE } from '../constants';
 
 @Controller('customers')
 export class CustomersController {
-  constructor(private readonly customersService: CustomersService) {}
+  constructor(@Inject(CUSTOMER_SERVICE) private readonly customersService: CustomersServiceProtocol) {}
 
   @Post()
-  create(@Body() createCustomerDto: CreateCustomerDto) {
-    return this.customersService.create(createCustomerDto);
+  async create(@Body() createCustomerDto: CreateCustomerDto) {
+    const result = await this.customersService.create(createCustomerDto);
+    if (result.isOk()) return result.value
+
+    throw new BadRequestException('BadRequest', {
+      cause: new Error(),
+      description: result.error.map(e => e.message).join(', ')
+    });
   }
 
   @Get()
-  findAll() {
-    return this.customersService.findAll();
+  async findAll() {
+    const result = await this.customersService.getAll();
+    if (result.isOk()) return result.value
+
+    throw new BadRequestException('BadRequest', {
+      cause: new Error(),
+      description: result.error.map(e => e.message).join(', ')
+    });
   }
 
   @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.customersService.findOne(+id);
+  async findOne(@Param('id') id: string) {
+    const result = await this.customersService.getById(id);
+    if (result.isOk()) return result.value
+
+    throw new BadRequestException('BadRequest', {
+      cause: new Error(),
+      description: result.error.map(e => e.message).join(', ')
+    });
   }
 
   @Patch(':id')
-  update(@Param('id') id: string, @Body() updateCustomerDto: UpdateCustomerDto) {
-    return this.customersService.update(+id, updateCustomerDto);
+  async update(@Param('id') id: string, @Body() updateCustomerDto: UpdateCustomerDto) {
+    const result = await this.customersService.update(id, updateCustomerDto);
+    if (result.isOk()) return result.value
+
+    throw new BadRequestException('BadRequest', {
+      cause: new Error(),
+      description: result.error.map(e => e.message).join(', ')
+    });
   }
 
   @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.customersService.remove(+id);
+  async remove(@Param('id') id: string) {
+    const result = await this.customersService.delete(id);
+    if (result.isOk()) return result.value
+
+    throw new BadRequestException('BadRequest', {
+      cause: new Error(),
+      description: result.error.map(e => e.message).join(', ')
+    });
   }
 }
