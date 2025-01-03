@@ -1,14 +1,13 @@
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from '../../Services/prisma.service';
-import { User } from '@prisma/client';
-import { UUID } from 'node:crypto';
 import { UsersRepositoryProtocol } from 'src/ports/Application/Protocols/users.repository.protocol';
+import { User } from 'src/ports/Domain/entities/user.entity';
 
 @Injectable()
 export class UsersRepository implements UsersRepositoryProtocol {
   constructor(private readonly prisma: PrismaService) {}
 
-  async getById(id: UUID): Promise<User | null> {
+  async getById(id: string): Promise<User | null> {
     return await this.prisma.user.findUnique({
       where: { id },
     });
@@ -31,7 +30,7 @@ export class UsersRepository implements UsersRepositoryProtocol {
     });
   }
 
-  async delete(id: UUID): Promise<User> {
+  async delete(id: string): Promise<User> {
     return await this.prisma.user.delete({
       where: { id },
     });

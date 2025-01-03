@@ -1,9 +1,9 @@
-import { randomUUID, UUID } from "node:crypto";
+import { v7 } from 'uuid';
 
 export abstract class Entity {
-    id: UUID = randomUUID();
+    id: string = v7();
     createdAt: Date = new Date();
-    updatedAt: Date;
+    updatedAt: Date | null;
     isDeleted: boolean = false;
-    deletedAt: Date;
+    deletedAt: Date | null;
 }
