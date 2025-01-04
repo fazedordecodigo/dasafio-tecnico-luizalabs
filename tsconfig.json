@@ -3,13 +3,15 @@
     "module": "commonjs",
     "strict": true,
     "declaration": true,
+    "noUnusedLocals": false,
     "removeComments": true,
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true,
     "allowSyntheticDefaultImports": true,
+    "useUnknownInCatchVariables": false,
     "target": "ES2021",
     "sourceMap": true,
-    "outDir": "./dist",
+    "outDir": "dist",
     "baseUrl": "./",
     "incremental": true,
     "skipLibCheck": true,
@@ -17,6 +19,11 @@
     "noImplicitAny": false,
     "strictBindCallApply": false,
     "forceConsistentCasingInFileNames": false,
-    "noFallthroughCasesInSwitch": false
+    "noFallthroughCasesInSwitch": false,
+    "allowJs": false,
+    "paths": {
+      "@adapters/*": ["src/adapters/*"],
+      "@ports/*": ["src/ports/*"]
+    }
   }
 }
