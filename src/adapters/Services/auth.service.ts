@@ -1,23 +1,29 @@
-import { Inject, Injectable, UnauthorizedException } from '@nestjs/common';
+import * as bcrypt from 'bcrypt';
 import { JwtService } from '@nestjs/jwt';
-import { UsersServiceProtocol } from 'src/ports/Application/Protocols/users.service.protocol';
-import { USER_SERVICE } from '../constants';
+import { Inject, Injectable, UnauthorizedException } from '@nestjs/common';
+import { USER_REPOSITORY } from '../constants';
+import { SignInAuthDto } from 'src/ports/Application/dto/signin-auth.dto';
+import { UsersRepositoryProtocol } from 'src/ports/Application/Protocols/users.repository.protocol';
 
 @Injectable()
 export class AuthService {
   constructor(
-    @Inject(USER_SERVICE) private readonly usersService: UsersServiceProtocol,
+    @Inject(USER_REPOSITORY) private readonly _repository: UsersRepositoryProtocol,
     private readonly jwtService: JwtService
 ) {}
 
-  async signIn(username: string, pass: string): Promise<any> {
-    const user = await this.usersService.findOne(username);
-    if (user?.password !== pass) {
+  async signIn(signin: SignInAuthDto): Promise<any> {
+    const result = await this._repository.getByEmail(signin.email);
+    if (!result) {
       throw new UnauthorizedException();
     }
-    const payload = { sub: user.id, username: user.email };
-    return {
-      access_token: await this.jwtService.signAsync(payload),
-    };
+    const isMatch = await bcrypt.compare(signin.password, result.password);
+    if (isMatch) {
+      const payload = { sub: result.email, role: result.role };
+      return {
+        access_token: await this.jwtService.signAsync(payload),
+      };
+    }
+    throw new UnauthorizedException();
   }
 }

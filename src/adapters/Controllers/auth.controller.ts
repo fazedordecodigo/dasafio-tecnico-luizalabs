@@ -9,16 +9,16 @@ import {
 } from '@nestjs/common';
 import { AuthService } from '../Services/auth.service';
 import { Public } from '../constants';
+import { SignInAuthDto } from 'src/ports/Application/dto/signin-auth.dto';
 
 @Controller('auth')
 export class AuthController {
   constructor(private readonly authService: AuthService) {}
 
   @Public()
-  @HttpCode(HttpStatus.OK)
   @Post('login')
-  signIn(@Body() signInDto: Record<string, any>) {
-    return this.authService.signIn(signInDto.username, signInDto.password);
+  async signIn(@Body() signInDto: SignInAuthDto) {
+    return await this.authService.signIn(signInDto);
   }
 
   @Get('profile')
