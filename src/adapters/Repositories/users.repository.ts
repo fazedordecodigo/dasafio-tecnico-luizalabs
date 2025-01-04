@@ -7,6 +7,12 @@ import { User } from 'src/ports/Domain/entities/user.entity';
 export class UsersRepository implements UsersRepositoryProtocol {
   constructor(private readonly prisma: PrismaService) {}
 
+  async getByEmail(email: string): Promise<User | null> {
+    return await this.prisma.user.findUnique({
+      where: { email },
+    });
+  }
+
   async getById(id: string): Promise<User | null> {
     return await this.prisma.user.findUnique({
       where: { id },
