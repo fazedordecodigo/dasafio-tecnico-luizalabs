@@ -17,6 +17,7 @@ import { CustomersRepository } from './Repositories/customers.repository';
 import { PrismaService } from './Services/prisma.service';
 import { UsersRepository } from './Repositories/users.repository';
 import { UsersController } from './Controllers/users.controller';
+import { RolesGuard } from './Guards/role.guard';
 
 @Module({
   controllers: [
@@ -42,13 +43,17 @@ import { UsersController } from './Controllers/users.controller';
       useClass: AuthGuard,
     },
     {
+      provide: APP_GUARD,
+      useClass: RolesGuard,
+    },
+    {
       provide: CUSTOMER_REPOSITORY,
       useClass: CustomersRepository,
     },
     {
       provide: USER_REPOSITORY,
       useClass: UsersRepository,
-    },
+    }
   ],
   exports: [CUSTOMER_REPOSITORY, USER_REPOSITORY],
 })
