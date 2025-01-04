@@ -1,51 +1,79 @@
-import * as bcrypt from 'bcrypt';
 import { Inject, Injectable, Logger } from '@nestjs/common';
-import { UsersServiceProtocol } from '../Protocols/users.service.protocol';
-import { User } from 'src/ports/Domain/entities/user.entity';
-import { Notification } from 'src/ports/Domain/entities/notification.entity';
+import * as bcrypt from 'bcrypt';
+import {
+  UsersRepositoryProtocol,
+  UsersServiceProtocol,
+} from '@ports/Application/Protocols';
+import { USER_REPOSITORY } from '@adapters/constants';
+import {
+  CreateUserDto,
+  GetByEmailUserDto,
+  GetByEmailUserResultDto,
+} from '@ports/Application/Dto';
 import { Result } from 'typescript-result';
-import { CreateUserDto } from '../dto/create-user.dto';
-import { USER_REPOSITORY } from 'src/adapters/constants';
-import { UsersRepositoryProtocol } from '../Protocols/users.repository.protocol';
-import { GetByEmailUserDto } from '../dto/get-by-email-user.dto';
-import { GetByEmailUserResultDto } from '../dto/get-by-email-user-result.dto';
+import { User, Notification } from '@ports/Domain/entities';
 
 @Injectable()
 export class UsersService implements UsersServiceProtocol {
+  private readonly USERS_RESVICE_CREATE = 'UsersService.create';
+  private readonly USERS_RESVICE_GET_BY_EMAIL = 'UsersService.getByEmail';
+  private readonly _logger = new Logger(UsersService.name, {
+    timestamp: true,
+  });
+
   constructor(
-    @Inject(USER_REPOSITORY) private readonly _repository: UsersRepositoryProtocol,
-    private readonly _logger = new Logger(UsersService.name, { timestamp: true })
+    @Inject(USER_REPOSITORY)
+    private readonly _repository: UsersRepositoryProtocol,
   ) {}
 
-  async getByEmail(email: GetByEmailUserDto): Promise<Result<GetByEmailUserResultDto, Notification>> {
+  public async getByEmail(
+    email: GetByEmailUserDto,
+  ): Promise<Result<GetByEmailUserResultDto, Notification>> {
     const user = await this._repository.getByEmail(email.email);
     if (!user) {
-      return Result.error({message: 'User not found'});
+      this._logger.warn(
+        `User ${email.email} not found`,
+        this.USERS_RESVICE_GET_BY_EMAIL,
+      );
+      return Result.error({ message: 'User not found' });
     }
+    this._logger.log(
+      `User ${email.email} found`,
+      this.USERS_RESVICE_GET_BY_EMAIL,
+    );
     return Result.ok({ email: user.email, role: user.role });
   }
 
-  async create(data: CreateUserDto): Promise<Result<void, Notification>> {
+  public async create(
+    data: CreateUserDto,
+  ): Promise<Result<void, Notification>> {
+    this._logger.log(`Creating user ${data.email}`, this.USERS_RESVICE_CREATE);
+
     const user = await this.getByEmail({ email: data.email });
     if (user.isOk()) {
-      return Result.error({message: 'User already exists'});
+      this._logger.warn(
+        `User ${data.email} already exists`,
+        this.USERS_RESVICE_CREATE,
+      );
+      return Result.error({ message: 'User already exists' });
     }
     const password = await this.hashPassword(data.password);
-    const newUser = new User(
-      data.email,
-      password,
-      data.role
-    );
+    const newUser = new User(data.email, password, data.role);
 
     const result = await this._repository.create(newUser);
     if (!result) {
-      return Result.error({message: 'Error creating user'});
+      this._logger.error(
+        `Error creating user ${data.email}`,
+        this.USERS_RESVICE_CREATE,
+      );
+      return Result.error({ message: 'Error creating user' });
     }
+    this._logger.log(`User ${data.email} created`, this.USERS_RESVICE_CREATE);
     return Result.ok();
   }
 
   private async hashPassword(password: string): Promise<string> {
-    const saltOrRounds = 10;
-    return await bcrypt.hash(password, saltOrRounds);
+    const salt = await bcrypt.genSalt();
+    return await bcrypt.hash(password, salt);
   }
 }
