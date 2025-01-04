@@ -15,7 +15,7 @@ export class CustomersController {
 
     throw new BadRequestException('BadRequest', {
       cause: new Error(),
-      description: result.error.map(e => e.message).join(', ')
+      description: result.error.message
     });
   }
 
@@ -26,7 +26,7 @@ export class CustomersController {
 
     throw new BadRequestException('BadRequest', {
       cause: new Error(),
-      description: result.error.map(e => e.message).join(', ')
+      description: result.error.message
     });
   }
 
@@ -37,7 +37,7 @@ export class CustomersController {
 
     throw new BadRequestException('BadRequest', {
       cause: new Error(),
-      description: result.error.map(e => e.message).join(', ')
+      description: result.error.message
     });
   }
 
@@ -48,7 +48,7 @@ export class CustomersController {
 
     throw new BadRequestException('BadRequest', {
       cause: new Error(),
-      description: result.error.map(e => e.message).join(', ')
+      description: result.error.message
     });
   }
 
@@ -59,7 +59,7 @@ export class CustomersController {
 
     throw new BadRequestException('BadRequest', {
       cause: new Error(),
-      description: result.error.map(e => e.message).join(', ')
+      description: result.error.message
     });
   }
 }
