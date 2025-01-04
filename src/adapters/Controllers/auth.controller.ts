@@ -1,12 +1,4 @@
-import {
-  Body,
-  Controller,
-  Get,
-  HttpCode,
-  HttpStatus,
-  Post,
-  Request,
-} from '@nestjs/common';
+import { Body, Controller, Get, Post, Request } from '@nestjs/common';
 import { AuthService } from '../Services/auth.service';
 import { Public } from '../constants';
 import { SignInAuthDto } from 'src/ports/Application/dto/signin-auth.dto';
