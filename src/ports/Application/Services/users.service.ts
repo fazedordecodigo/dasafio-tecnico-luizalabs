@@ -1,5 +1,5 @@
 import * as bcrypt from 'bcrypt';
-import { Inject, Injectable } from '@nestjs/common';
+import { Inject, Injectable, Logger } from '@nestjs/common';
 import { UsersServiceProtocol } from '../Protocols/users.service.protocol';
 import { User } from 'src/ports/Domain/entities/user.entity';
 import { Notification } from 'src/ports/Domain/entities/notification.entity';
@@ -12,7 +12,10 @@ import { GetByEmailUserResultDto } from '../dto/get-by-email-user-result.dto';
 
 @Injectable()
 export class UsersService implements UsersServiceProtocol {
-  constructor(@Inject(USER_REPOSITORY) private readonly _repository: UsersRepositoryProtocol) {}
+  constructor(
+    @Inject(USER_REPOSITORY) private readonly _repository: UsersRepositoryProtocol,
+    private readonly _logger = new Logger(UsersService.name, { timestamp: true })
+  ) {}
 
   async getByEmail(email: GetByEmailUserDto): Promise<Result<GetByEmailUserResultDto, Notification>> {
     const user = await this._repository.getByEmail(email.email);
@@ -21,6 +24,7 @@ export class UsersService implements UsersServiceProtocol {
     }
     return Result.ok({ email: user.email, role: user.role });
   }
+
   async create(data: CreateUserDto): Promise<Result<void, Notification>> {
     const user = await this.getByEmail({ email: data.email });
     if (user.isOk()) {
