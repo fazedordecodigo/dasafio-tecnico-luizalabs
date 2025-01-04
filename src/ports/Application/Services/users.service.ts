@@ -9,7 +9,7 @@ import {
   CreateUserDto,
   GetByEmailUserDto,
   GetByEmailUserResultDto,
-} from '@ports/Application/Dto';
+} from '@ports/Application/dto';
 import { Result } from 'typescript-result';
 import { User, Notification } from '@ports/Domain/entities';
 

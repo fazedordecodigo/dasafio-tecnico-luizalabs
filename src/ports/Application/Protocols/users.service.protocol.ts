@@ -1,10 +1,6 @@
-import {
-  CreateUserDto,
-  GetByEmailUserDto,
-  GetByEmailUserResultDto,
-} from '@ports/Application/Dto';
 import { Notification } from '@ports/Domain/entities';
 import { Result } from 'typescript-result';
+import { CreateUserDto, GetByEmailUserDto, GetByEmailUserResultDto } from '@ports/Application/dto';
 
 export interface UsersServiceProtocol {
   getByEmail(
