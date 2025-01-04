@@ -18,6 +18,7 @@ import { PrismaService } from './Services/prisma.service';
 import { UsersRepository } from './Repositories/users.repository';
 import { UsersController } from './Controllers/users.controller';
 import { RolesGuard } from './Guards/role.guard';
+import { ThrottlerGuard } from '@nestjs/throttler';
 
 @Module({
   controllers: [
@@ -45,6 +46,10 @@ import { RolesGuard } from './Guards/role.guard';
     {
       provide: APP_GUARD,
       useClass: RolesGuard,
+    },
+    {
+      provide: APP_GUARD,
+      useClass: ThrottlerGuard
     },
     {
       provide: CUSTOMER_REPOSITORY,
