@@ -1,9 +1,10 @@
-FROM node:22-alpine AS builder
+FROM node:lts-bookworm AS builder
 
 WORKDIR /app
 
-COPY package*.json ./
-RUN npm install
+COPY package.json ./
+COPY package-lock.json ./
+RUN npm ci --omit=dev
 
 COPY . .
 
