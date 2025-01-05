@@ -12,7 +12,7 @@ import { AuthGuard } from './guards/auth.guard';
 import { CustomersController } from './controllers/customers.controller';
 import { ProductsController } from './controllers/products.controller';
 import { FavoritesController } from './controllers/favorites.controller';
-import { PortsModule } from 'src/ports/ports.module';
+import { PortsModule } from '@ports/ports.module';
 import { CustomersRepository } from './repositories/customers.repository';
 import { PrismaService } from './services/prisma.service';
 import { UsersRepository } from './repositories/users.repository';
