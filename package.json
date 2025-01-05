@@ -72,7 +72,7 @@
       "json",
       "ts"
     ],
-    "rootDir": "src",
+    "rootDir": ".",
     "testRegex": ".*\\.spec\\.ts$",
     "transform": {
       "^.+\\.(t|j)s$": "ts-jest"
@@ -83,7 +83,7 @@
     "coverageDirectory": "../coverage",
     "testEnvironment": "node",
     "moduleNameMapper": {
-      "^@adapter(.*)$": "<rootDir>/src/adapter/$1",
+      "^@adapters(.*)$": "<rootDir>/src/adapters/$1",
       "^@ports(.*)$": "<rootDir>/src/ports/$1"
     }
   }
