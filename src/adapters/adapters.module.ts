@@ -1,6 +1,6 @@
 import { forwardRef, Module } from '@nestjs/common';
-import { AuthController } from './Controllers/auth.controller';
-import { AuthService } from './Services/auth.service';
+import { AuthController } from './controllers/auth.controller';
+import { AuthService } from './services/auth.service';
 import { JwtModule } from '@nestjs/jwt';
 import {
   CUSTOMER_REPOSITORY,
@@ -8,16 +8,16 @@ import {
   USER_REPOSITORY,
 } from './constants';
 import { APP_GUARD } from '@nestjs/core';
-import { AuthGuard } from './Guards/auth.guard';
-import { CustomersController } from './Controllers/customers.controller';
-import { ProductsController } from './Controllers/products.controller';
-import { FavoritesController } from './Controllers/favorites.controller';
+import { AuthGuard } from './guards/auth.guard';
+import { CustomersController } from './controllers/customers.controller';
+import { ProductsController } from './controllers/products.controller';
+import { FavoritesController } from './controllers/favorites.controller';
 import { PortsModule } from 'src/ports/ports.module';
-import { CustomersRepository } from './Repositories/customers.repository';
-import { PrismaService } from './Services/prisma.service';
-import { UsersRepository } from './Repositories/users.repository';
-import { UsersController } from './Controllers/users.controller';
-import { RolesGuard } from './Guards/role.guard';
+import { CustomersRepository } from './repositories/customers.repository';
+import { PrismaService } from './services/prisma.service';
+import { UsersRepository } from './repositories/users.repository';
+import { UsersController } from './controllers/users.controller';
+import { RolesGuard } from './guards/role.guard';
 import { ThrottlerGuard } from '@nestjs/throttler';
 
 @Module({
