@@ -1,4 +1,5 @@
-import { Entity, Product } from '@ports/domain/entities';
+import { Product } from '@ports/domain/entities';
+import { Entity } from './entity';
 
 export class Customer extends Entity {
   public favorities?: Product[];
