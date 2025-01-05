@@ -3,7 +3,7 @@ import { CreateCustomerDto } from '../dto/create-customer.dto';
 import { UpdateCustomerDto } from '../dto/update-customer.dto';
 import { CustomersServiceProtocol } from '../protocols/customers.service.protocol';
 import { CustomersRepositoryProtocol } from '../protocols/customers.repository.protocol';
-import { CUSTOMER_REPOSITORY } from 'src/adapters/constants';
+import { CUSTOMER_REPOSITORY } from '@adapters/constants';
 import { Customer } from '@ports/domain/entities/customer.entity';
 import { Notification } from '@ports/domain/entities/notification.entity';
 import { Result } from 'typescript-result';
