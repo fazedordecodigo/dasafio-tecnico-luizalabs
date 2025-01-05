@@ -5,6 +5,8 @@ import { UsersService } from '@ports/application/services';
 import { UsersRepositoryProtocol } from '@ports/application/protocols';
 import { User } from '@ports/domain/entities';
 import { Role } from '@ports/domain/entities/enums';
+import { userFake } from '../fakers/user.faker';
+import { Result } from 'typescript-result';
 
 describe('UsersService', () => {
   let sut: UsersService;
@@ -17,7 +19,8 @@ describe('UsersService', () => {
         {
             provide: USER_REPOSITORY,
             useValue: {
-                getByEmail: jest.fn()
+                getByEmail: jest.fn(),
+                create: jest.fn()
             }
         }
       ],
@@ -41,38 +44,49 @@ describe('UsersService', () => {
     });
 
     it('should return user if found', async () => {
-      const email = faker.internet.email()
-      const user = new User(
-        email,
-        faker.internet.password(),
-        Role.Admin
-      )
       const expected = {
-        email: user.email,
-        role: user.role
+        email: userFake.email,
+        role: userFake.role
       }
-      jest.spyOn(repository, 'getByEmail').mockResolvedValue(user);
-      const result = await sut.getByEmail({ email });
+      jest.spyOn(repository, 'getByEmail').mockResolvedValue(userFake);
+      const result = await sut.getByEmail({ email: userFake.email });
       expect(result.value).toEqual(expected);
     });
 
     it('should return error if user not found', async () => {
-      const email = faker.internet.email()
       const expected = {
         message: 'User not found'
       }
       jest.spyOn(repository, 'getByEmail').mockResolvedValue(null);
-      const result = await sut.getByEmail({ email });
+      const result = await sut.getByEmail({ email: userFake.email });
       expect(result.error).toEqual(expected);
     });
 
     it('should return error if repository throws', async () => {
-      const email = faker.internet.email();
       const expected = 'Internal error';
       jest.spyOn(repository, 'getByEmail').mockRejectedValue(new Error(expected));
       expect(async () => {
-        await sut.getByEmail({ email });
+        await sut.getByEmail({ email: userFake.email });
       }).rejects.toThrow(expected);
+    });
+  });
+
+  describe('create', () => {
+    it('should call getByEmail with correct value', async () => {
+      userFake.role = "USER";
+      const spy = jest.spyOn(sut, 'getByEmail');
+      await sut.create({ email: userFake.email, password: userFake.password, role: "USER" });
+      expect(spy).toHaveBeenCalledTimes(1);
+    });
+
+    it('should return error if user already exists', async () => {
+      userFake.role = "USER";
+      const expected = {
+        message: 'User already exists'
+      }
+      jest.spyOn(sut, 'getByEmail').mockResolvedValue(Result.ok({ email: userFake.email, role: userFake.role }));
+      const result = await sut.create({ email: userFake.email, password: userFake.password, role: 'USER' });
+      expect(result.error).toEqual(expected);
     });
   });
 });
