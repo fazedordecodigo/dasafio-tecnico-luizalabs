@@ -29,6 +29,7 @@ services:
     container_name: favorites-api
     environment:
       - DATABASE_URL=${DATABASE_URL}
+      - JWT_SECRET=${JWT_SECRET}
     ports:
       - 3000:3000
     networks:
