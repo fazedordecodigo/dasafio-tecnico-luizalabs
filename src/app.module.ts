@@ -10,6 +10,7 @@ import { ConfigModule } from '@nestjs/config';
     AdaptersModule,
     ConfigModule.forRoot({
       isGlobal: true,
+      envFilePath: '.env.test.local'
     }),
     ThrottlerModule.forRoot([{
       ttl: 60000,
