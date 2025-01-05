@@ -2,8 +2,9 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { INestApplication } from '@nestjs/common';
 import * as request from 'supertest';
 import { AppModule } from './../src/app.module';
+import { faker } from '@faker-js/faker/locale/pt_BR';
 
-describe('AppController (e2e)', () => {
+describe('UserController (e2e)', () => {
   let app: INestApplication;
 
   beforeEach(async () => {
@@ -15,10 +16,14 @@ describe('AppController (e2e)', () => {
     await app.init();
   });
 
-  it('/ (GET)', () => {
+  it('users/ (POST)', () => {
     return request(app.getHttpServer())
-      .get('/')
-      .expect(200)
-      .expect('Hello World!');
+      .post('/users')
+      .send({
+        "email": faker.internet.email(),
+        "password": faker.internet.password(),
+        "role": "USER"
+       })
+      .expect(201);
   });
 });
