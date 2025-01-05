@@ -1,0 +1,1 @@
+export { ValidationPipeOptions } from '@adapters/pipes/validation.pipe.options';

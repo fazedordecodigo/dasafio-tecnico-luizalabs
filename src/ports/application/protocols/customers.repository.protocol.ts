@@ -1,4 +1,4 @@
 import { Customer } from "@ports/domain/entities/customer.entity";
-import { RepositoryProtocol } from "./repository.protocol";
+import { RepositoryProtocol } from "@ports/application/protocols";
 
 export interface CustomersRepositoryProtocol extends RepositoryProtocol<Customer> {}

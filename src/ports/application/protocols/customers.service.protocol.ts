@@ -1,8 +1,6 @@
 import { Result } from "typescript-result"
-import { CreateCustomerDto } from "../dto/create-customer.dto"
-import { UpdateCustomerDto } from "../dto/update-customer.dto"
-import { Customer } from "@ports/domain/entities/customer.entity"
-import { Notification } from "@ports/domain/entities/notification.entity"
+import { CreateCustomerDto, UpdateCustomerDto } from "@ports/application/dto"
+import { Customer, Notification } from "@ports/domain/entities"
 
 export interface CustomersServiceProtocol {
     getById(id: string): Promise<Result<Customer, Notification>>

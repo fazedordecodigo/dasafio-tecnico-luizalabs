@@ -1,22 +1,25 @@
 import { Inject, Injectable } from '@nestjs/common';
-import { CreateCustomerDto } from '../dto/create-customer.dto';
-import { UpdateCustomerDto } from '../dto/update-customer.dto';
-import { CustomersServiceProtocol } from '../protocols/customers.service.protocol';
-import { CustomersRepositoryProtocol } from '../protocols/customers.repository.protocol';
+import { CreateCustomerDto, UpdateCustomerDto } from '@ports/application/dto';
+import {
+  CustomersRepositoryProtocol,
+  CustomersServiceProtocol,
+} from '@ports/application/protocols';
 import { CUSTOMER_REPOSITORY } from '@adapters/constants';
-import { Customer } from '@ports/domain/entities/customer.entity';
-import { Notification } from '@ports/domain/entities/notification.entity';
+import { Customer, Notification } from '@ports/domain/entities';
 import { Result } from 'typescript-result';
 
 @Injectable()
 export class CustomersService implements CustomersServiceProtocol {
-  constructor(@Inject(CUSTOMER_REPOSITORY) private readonly _repository: CustomersRepositoryProtocol) {}
+  constructor(
+    @Inject(CUSTOMER_REPOSITORY)
+    private readonly _repository: CustomersRepositoryProtocol,
+  ) {}
 
   async getById(id: string): Promise<Result<Customer, Notification>> {
     try {
       const customer = await this._repository.getById(id);
       if (!customer) {
-        return Result.error({ message:'Customer not found' });
+        return Result.error({ message: 'Customer not found' });
       }
       return Result.ok(customer);
     } catch (error) {
@@ -29,16 +32,15 @@ export class CustomersService implements CustomersServiceProtocol {
       const customers = await this._repository.getAll(skip, take);
       return Result.ok(customers);
     } catch (error) {
-      return Result.error({ message:'Error fetching customers' });
+      return Result.error({ message: 'Error fetching customers' });
     }
   }
 
-  async create(data: CreateCustomerDto): Promise<Result<Customer, Notification>> {
+  async create(
+    data: CreateCustomerDto,
+  ): Promise<Result<Customer, Notification>> {
     try {
-      const customer = new Customer(
-        data.name,
-        data.email
-      );
+      const customer = new Customer(data.name, data.email);
       const result = await this._repository.create(customer);
       return Result.ok(result);
     } catch (error) {
@@ -46,20 +48,19 @@ export class CustomersService implements CustomersServiceProtocol {
     }
   }
 
-  async update(id: string, data: UpdateCustomerDto): Promise<Result<void, Notification>> {
+  async update(
+    id: string,
+    data: UpdateCustomerDto,
+  ): Promise<Result<void, Notification>> {
     try {
-      const customer = new Customer(
-        data.name,
-        data.email,
-        id
-      );
+      const customer = new Customer(data.name, data.email, id);
       const result = await this._repository.update(customer);
       if (!result) {
-        return Result.error({ message:'Customer not found' });
+        return Result.error({ message: 'Customer not found' });
       }
       return Result.ok();
     } catch (error) {
-      return Result.error({ message:'Error updating customer' });
+      return Result.error({ message: 'Error updating customer' });
     }
   }
 
@@ -68,8 +69,7 @@ export class CustomersService implements CustomersServiceProtocol {
       await this._repository.delete(id);
       return Result.ok();
     } catch (error) {
-      return Result.error({ message:'Error deleting customer' });
+      return Result.error({ message: 'Error deleting customer' });
     }
   }
 }
-
