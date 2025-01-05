@@ -1,7 +1,7 @@
 import { SetMetadata } from "@nestjs/common";
 
 export const jwtConstants = {
-  secret: '51400F15-DE93-4243-A25A-90210DC6C450',
+  secret: process.env.JWT_SECRET,
 };
 
 export const IS_PUBLIC_KEY = 'isPublic';
