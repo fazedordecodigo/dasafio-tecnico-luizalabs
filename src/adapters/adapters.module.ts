@@ -19,6 +19,7 @@ import { UsersRepository } from './repositories/users.repository';
 import { UsersController } from './controllers/users.controller';
 import { RolesGuard } from './guards/role.guard';
 import { ThrottlerGuard } from '@nestjs/throttler';
+import { ConfigModule, ConfigService } from '@nestjs/config';
 
 @Module({
   controllers: [
@@ -30,10 +31,14 @@ import { ThrottlerGuard } from '@nestjs/throttler';
   ],
   imports: [
     forwardRef(() => PortsModule),
-    JwtModule.register({
+    ConfigModule,
+    JwtModule.registerAsync({
       global: true,
-      secret: jwtConstants.secret,
-      signOptions: { expiresIn: '60s' },
+      useFactory: async (configService: ConfigService) => ({
+        secret: configService.get<string>('JWT_SECRET'),
+        signOptions: { expiresIn: '60s' },
+      }),
+      inject: [ConfigService],
     }),
   ],
   providers: [
