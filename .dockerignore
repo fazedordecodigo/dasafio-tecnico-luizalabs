@@ -1,5 +1,16 @@
 Dockerfile
 .dockerignore
+.env
+.env.test.local
+.env-sample
+.vscode
+.eslintrc.js
+.git
+.gitignore
+.idea
+.prettierrc
 node_modules
 npm-debug.log
 dist
+test
+README.md
