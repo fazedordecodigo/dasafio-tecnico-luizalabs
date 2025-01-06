@@ -36,8 +36,7 @@ model Product {
   price       Float
   image       String
   reviewScore Float
-  customer    Customer @relation(fields: [customerId], references: [id])
-  customerId  String
+  customers   Customer[]
   createdAt   DateTime
   updatedAt   DateTime?
   isDeleted   Boolean
