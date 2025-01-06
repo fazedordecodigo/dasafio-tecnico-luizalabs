@@ -7,11 +7,11 @@ import {
   Inject,
   Query,
 } from '@nestjs/common';
-import { Public, USER_SERVICE } from '@adapters/constants';
+import { USER_SERVICE } from '@adapters/constants';
 import { UsersServiceProtocol } from '@ports/application/protocols';
 import { CreateUserDto, GetByEmailUserDto } from '@ports/application/dto';
 import { Role } from '@ports/domain/entities/enums';
-import { Roles } from '@adapters/decorators';
+import { Public, Roles } from '@adapters/decorators';
 
 @Controller('users')
 export class UsersController {
