@@ -17,7 +17,8 @@
     "test:watch": "jest --watch",
     "test:cov": "jest --coverage",
     "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
-    "test:e2e": "jest --detectOpenHandles --config ./test/e2e-tests/jest-e2e.json"
+    "test:e2e": "jest --detectOpenHandles --config ./test/e2e-tests/jest-e2e.json",
+    "seed": "npx prisma db seed"
   },
   "dependencies": {
     "@nestjs/common": "^10.0.0",
@@ -70,6 +71,9 @@
   "_moduleAliases": {
     "@adapters": "./dist/adapters/",
     "@ports": "./dist/ports/"
+  },
+  "prisma": {
+    "seed": "ts-node prisma/seed.ts"
   },
   "jest": {
     "moduleFileExtensions": [
