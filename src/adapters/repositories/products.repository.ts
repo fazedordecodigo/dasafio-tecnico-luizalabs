@@ -1,20 +1,35 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, Logger } from '@nestjs/common';
 import { PrismaService } from '@adapters/services';
 import { ProductsRepositoryProtocol } from '@ports/application/protocols';
 import { ProductDto } from '@adapters/dtos/products/product.dto';
 
 @Injectable()
 export class ProductsRepository implements ProductsRepositoryProtocol {
+  private readonly _logger = new Logger(ProductsRepository.name, {
+    timestamp: true,
+  });
+
   constructor(private readonly prisma: PrismaService) {}
 
   async getById(id: string): Promise<ProductDto | null> {
-    return await this.prisma.product.findUnique({
-      where: { id },
-    });
+    try {
+      return await this.prisma.product.findUnique({
+        where: { id },
+      });
+    } catch (error) {
+      this._logger.error(error, 'ProductsRepository.getById');
+      throw error;
+    }
   }
 
   async getAll(skip?: number, take?: number): Promise<ProductDto[]> {
-    return await this.prisma.product.findMany({ skip, take });
+    try {
+      this._logger.log('Getting all products', 'ProductsRepository.getAll');
+      return await this.prisma.product.findMany({ skip, take });
+    } catch (error) {
+      this._logger.error(error, 'ProductsRepository.getAll');
+      throw error;
+    }
   }
 
   async create(data: ProductDto): Promise<ProductDto> {

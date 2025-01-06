@@ -22,45 +22,6 @@ export class ProductsService implements ProductsServiceProtocol {
     private readonly productsRepository: ProductsRepositoryProtocol,
   ) {}
 
-  public async create(
-    data: CreateProductDto,
-  ): Promise<Result<ReturnProductDto, Notification>> {
-    this._logger.log(`Creating product: ${data.title}`);
-    const productExists = await this.getByTitle(data.title);
-    if (productExists.isOk()) {
-      this._logger.warn(`Product already exists`);
-      return Result.error({ message: 'Product already exists' });
-    }
-    const product = new Product(
-      data.title,
-      data.brand,
-      data.price,
-      data.image,
-      data.reviewScore,
-    );
-    const result = await this.productsRepository.create(product);
-    if (!result) {
-      this._logger.error('Error creating product');
-      return Result.error({ message: 'Error creating product' });
-    }
-    this._logger.log(`Product created: ${product.title}`);
-    return Result.ok({
-      id: product.id,
-      title: product.title,
-      brand: product.brand,
-      price: product.price,
-      image: product.image,
-      reviewScore: product.reviewScore,
-    });
-  }
-  update(
-    data: UpdateProductDto,
-  ): Promise<Result<ReturnProductDto, Notification>> {
-    throw new Error('Method not implemented.');
-  }
-  delete(id: string): Promise<Result<void, Notification>> {
-    throw new Error('Method not implemented.');
-  }
   public async getById(id: string): Promise<Result<ReturnProductDto, Notification>> {
     this._logger.log(`Getting product by id: ${id}`);
     const product = await this.productsRepository.getById(id);
@@ -78,14 +39,22 @@ export class ProductsService implements ProductsServiceProtocol {
       reviewScore: product.reviewScore,
     });
   }
-  getAll(
+  public async getAll(
     skip?: number,
     take?: number,
   ): Promise<Result<ReturnProductDto[], Notification>> {
-    throw new Error('Method not implemented.');
-  }
-
-  public async getByTitle(title: string): Promise<Result<ReturnProductDto, Notification>> {
-    throw new Error('Method not implemented.');
+    this._logger.log(`Getting all products`);
+    const products = await this.productsRepository.getAll(skip, take)
+    this._logger.log(`Products found: ${products.length}`);
+    return Result.ok(
+      products.map((product) => ({
+        id: product.id,
+        title: product.title,
+        brand: product.brand,
+        price: product.price,
+        image: product.image,
+        reviewScore: product.reviewScore,
+      })),
+    );
   }
 }
