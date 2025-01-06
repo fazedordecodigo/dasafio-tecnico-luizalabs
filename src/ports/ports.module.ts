@@ -29,8 +29,6 @@ import {
     },
   ],
   exports: [
-    FavoritesService,
-    ProductsService,
     USER_SERVICE,
     CUSTOMER_SERVICE,
     PRODUCT_SERVICE,
