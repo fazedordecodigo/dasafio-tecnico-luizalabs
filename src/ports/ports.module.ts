@@ -7,7 +7,6 @@ import {
 import { AdaptersModule } from '@adapters/adapters.module';
 import {
   CustomersService,
-  FavoritesService,
   ProductsService,
   UsersService,
 } from '@ports/application/services';
@@ -16,8 +15,6 @@ import {
   imports: [forwardRef(() => AdaptersModule)],
   providers: [
     CustomersService,
-    FavoritesService,
-    ProductsService,
     {
       provide: USER_SERVICE,
       useClass: UsersService,
