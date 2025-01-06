@@ -30,8 +30,7 @@ beforeAll(async () => {
       db: {
         url: urlConnection,
       },
-    },
-    log: ['query'],
+    }
   });
   console.log('connected to test db...');
 });
