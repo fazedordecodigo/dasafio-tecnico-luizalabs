@@ -1,5 +1,6 @@
 import { Result } from "typescript-result"
 import { CreateCustomerDto, UpdateCustomerDto } from "@ports/application/dto"
+import { Notification } from "@ports/domain/entities"
 import { CustomerDto } from "@adapters/dtos"
 
 export interface CustomersServiceProtocol {
