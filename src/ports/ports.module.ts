@@ -1,5 +1,9 @@
 import { forwardRef, Module } from '@nestjs/common';
-import { CUSTOMER_SERVICE, PRODUCT_SERVICE, USER_SERVICE } from '@adapters/constants';
+import {
+  CUSTOMER_SERVICE,
+  PRODUCT_SERVICE,
+  USER_SERVICE,
+} from '@adapters/constants';
 import { AdaptersModule } from '@adapters/adapters.module';
 import {
   CustomersService,
@@ -24,9 +28,15 @@ import {
     },
     {
       provide: PRODUCT_SERVICE,
-      useClass: ProductsService
-    }
+      useClass: ProductsService,
+    },
   ],
-  exports: [FavoritesService, ProductsService, USER_SERVICE, CUSTOMER_SERVICE],
+  exports: [
+    FavoritesService,
+    ProductsService,
+    USER_SERVICE,
+    CUSTOMER_SERVICE,
+    PRODUCT_SERVICE,
+  ],
 })
 export class PortsModule {}
