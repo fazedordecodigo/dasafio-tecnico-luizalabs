@@ -7,6 +7,7 @@ import {
 import { CUSTOMER_REPOSITORY } from '@adapters/constants';
 import { Customer, Notification } from '@ports/domain/entities';
 import { Result } from 'typescript-result';
+import { CustomerDto } from '@adapters/dtos';
 
 @Injectable()
 export class CustomersService implements CustomersServiceProtocol {
@@ -15,7 +16,7 @@ export class CustomersService implements CustomersServiceProtocol {
     private readonly _repository: CustomersRepositoryProtocol,
   ) {}
 
-  async getById(id: string): Promise<Result<Customer, Notification>> {
+  async getById(id: string): Promise<Result<CustomerDto, Notification>> {
     try {
       const customer = await this._repository.getById(id);
       if (!customer) {
@@ -27,7 +28,7 @@ export class CustomersService implements CustomersServiceProtocol {
     }
   }
 
-  async getAll(skip = 0, take = 10): Promise<Result<Customer[], Notification>> {
+  async getAll(skip = 0, take = 10): Promise<Result<CustomerDto[], Notification>> {
     try {
       const customers = await this._repository.getAll(skip, take);
       return Result.ok(customers);
@@ -38,7 +39,7 @@ export class CustomersService implements CustomersServiceProtocol {
 
   async create(
     data: CreateCustomerDto,
-  ): Promise<Result<Customer, Notification>> {
+  ): Promise<Result<CustomerDto, Notification>> {
     try {
       const customer = new Customer(data.name, data.email);
       const result = await this._repository.create(customer);

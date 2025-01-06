@@ -13,7 +13,6 @@ import {
   AuthController,
   CustomersController,
   ProductsController,
-  FavoritesController,
   UsersController,
 } from '@adapters/controllers';
 import { AuthGuard, RoleGuard } from '@adapters/guards';
@@ -29,7 +28,6 @@ import { AuthService, PrismaService } from '@adapters/services';
     AuthController,
     CustomersController,
     ProductsController,
-    FavoritesController,
     UsersController,
   ],
   imports: [

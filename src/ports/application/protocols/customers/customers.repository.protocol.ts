@@ -1,4 +1,4 @@
-import { Customer } from "@ports/domain/entities";
 import { RepositoryProtocol } from "@ports/application/protocols";
+import { CustomerDto } from "@adapters/dtos";
 
-export interface CustomersRepositoryProtocol extends RepositoryProtocol<Customer> {}
+export interface CustomersRepositoryProtocol extends RepositoryProtocol<CustomerDto> {}
