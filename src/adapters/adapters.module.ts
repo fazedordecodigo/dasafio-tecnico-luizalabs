@@ -4,7 +4,11 @@ import { APP_GUARD } from '@nestjs/core';
 import { ThrottlerGuard } from '@nestjs/throttler';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { PortsModule } from '@ports/ports.module';
-import { CUSTOMER_REPOSITORY, USER_REPOSITORY } from '@adapters/constants';
+import {
+  CUSTOMER_REPOSITORY,
+  PRODUCT_REPOSITORY,
+  USER_REPOSITORY,
+} from '@adapters/constants';
 import {
   AuthController,
   CustomersController,
@@ -13,7 +17,11 @@ import {
   UsersController,
 } from '@adapters/controllers';
 import { AuthGuard, RoleGuard } from '@adapters/guards';
-import { CustomersRepository, UsersRepository } from '@adapters/repositories';
+import {
+  CustomersRepository,
+  ProductsRepository,
+  UsersRepository,
+} from '@adapters/repositories';
 import { AuthService, PrismaService } from '@adapters/services';
 
 @Module({
@@ -59,7 +67,11 @@ import { AuthService, PrismaService } from '@adapters/services';
       provide: USER_REPOSITORY,
       useClass: UsersRepository,
     },
+    {
+      provide: PRODUCT_REPOSITORY,
+      useClass: ProductsRepository,
+    },
   ],
-  exports: [CUSTOMER_REPOSITORY, USER_REPOSITORY],
+  exports: [CUSTOMER_REPOSITORY, USER_REPOSITORY, PRODUCT_REPOSITORY],
 })
 export class AdaptersModule {}
