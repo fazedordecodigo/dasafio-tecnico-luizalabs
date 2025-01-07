@@ -35,7 +35,7 @@ model Product {
   brand       String
   price       Float
   image       String
-  review      Review[]
+  reviews     Review[]
   customers   Customer[]
   createdAt   DateTime
   updatedAt   DateTime?
