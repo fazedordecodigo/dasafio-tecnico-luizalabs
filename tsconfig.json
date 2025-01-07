@@ -23,7 +23,7 @@
     "allowJs": false,
     "paths": {
       "@adapters/*": ["src/adapters/*"],
-      "@ports/*": ["src/ports/*"]
+      "@domain/*": ["src/domain/*"]
     }
   }
 }

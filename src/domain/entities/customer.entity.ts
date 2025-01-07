@@ -1,4 +1,4 @@
-import { Product } from '@ports/domain/entities';
+import { Product } from '@domain/entities';
 import { Entity } from './entity';
 
 export class Customer extends Entity {

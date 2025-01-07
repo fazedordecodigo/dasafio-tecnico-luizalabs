@@ -1,6 +1,6 @@
 import { PRODUCT_SERVICE } from '@adapters/constants';
 import { Controller, Get, Param, Inject, BadRequestException } from '@nestjs/common';
-import { ProductsServiceProtocol } from '@ports/application/protocols';
+import { ProductsServiceProtocol } from '@domain/protocols';
 
 @Controller('products')
 export class ProductsController {

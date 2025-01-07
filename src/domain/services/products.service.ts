@@ -4,12 +4,12 @@ import {
   CreateProductDto,
   ReturnProductDto,
   UpdateProductDto,
-} from '@ports/application/dto';
+} from '@domain/dtos';
 import {
   ProductsRepositoryProtocol,
   ProductsServiceProtocol,
-} from '@ports/application/protocols';
-import { Notification, Product } from '@ports/domain/entities';
+} from '@domain/protocols';
+import { Notification, Product } from '@domain/entities';
 import { Result } from 'typescript-result';
 
 @Injectable()

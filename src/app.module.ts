@@ -1,5 +1,5 @@
 import { Module } from '@nestjs/common';
-import { PortsModule } from '@ports/ports.module';
+import { PortsModule } from 'src/domain/ports.module';
 import { AdaptersModule } from '@adapters/adapters.module';
 import { ThrottlerModule } from '@nestjs/throttler';
 import { ConfigModule } from '@nestjs/config';

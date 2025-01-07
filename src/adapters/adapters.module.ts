@@ -3,7 +3,7 @@ import { JwtModule } from '@nestjs/jwt';
 import { APP_GUARD } from '@nestjs/core';
 import { ThrottlerGuard } from '@nestjs/throttler';
 import { ConfigModule, ConfigService } from '@nestjs/config';
-import { PortsModule } from '@ports/ports.module';
+import { PortsModule } from '@domain/ports.module';
 import {
   CUSTOMER_REPOSITORY,
   PRODUCT_REPOSITORY,

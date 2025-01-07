@@ -1,0 +1,9 @@
+export { CreateUserDto } from '@domain/dtos/users/create-user.dto';
+export { GetByEmailUserDto } from '@domain/dtos/users/get-by-email-user.dto';
+export { GetByEmailUserResultDto } from '@domain/dtos/users/get-by-email-user-result.dto';
+export { CreateCustomerDto } from '@domain/dtos/customers/create-customer.dto';
+export { CreateProductDto } from '@domain/dtos/products/create-product.dto';
+export { SignInAuthDto } from '@domain/dtos/signin/signin-auth.dto';
+export { UpdateCustomerDto } from '@domain/dtos/customers/update-customer.dto';
+export { UpdateProductDto } from '@domain/dtos/products/update-product.dto';
+export { ReturnProductDto } from '@domain/dtos/products/return-product.dto';

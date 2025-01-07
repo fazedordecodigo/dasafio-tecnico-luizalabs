@@ -1,6 +1,6 @@
 import { Injectable, Logger } from '@nestjs/common';
 import { PrismaService } from '@adapters/services';
-import { ProductsRepositoryProtocol } from '@ports/application/protocols';
+import { ProductsRepositoryProtocol } from '@domain/protocols';
 import { ProductDto } from '@adapters/dtos/products/product.dto';
 
 @Injectable()

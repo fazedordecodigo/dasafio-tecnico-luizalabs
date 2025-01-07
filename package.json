@@ -70,7 +70,7 @@
   },
   "_moduleAliases": {
     "@adapters": "./dist/adapters/",
-    "@ports": "./dist/ports/"
+    "@domain": "./dist/domain/"
   },
   "prisma": {
     "seed": "ts-node prisma/seed.ts"
@@ -93,7 +93,7 @@
     "testEnvironment": "node",
     "moduleNameMapper": {
       "^@adapters(.*)$": "<rootDir>/src/adapters/$1",
-      "^@ports(.*)$": "<rootDir>/src/ports/$1"
+      "^@domain(.*)$": "<rootDir>/src/domain/$1"
     }
   }
 }

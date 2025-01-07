@@ -1,5 +1,5 @@
-import { ReturnProductDto } from '@ports/application/dto';
-import { Notification } from '@ports/domain/entities';
+import { ReturnProductDto } from '@domain/dtos';
+import { Notification } from '@domain/entities';
 import { Result } from 'typescript-result';
 
 export interface ProductsServiceProtocol {

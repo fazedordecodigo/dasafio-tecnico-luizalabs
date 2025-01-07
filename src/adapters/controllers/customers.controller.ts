@@ -9,8 +9,8 @@ import {
   BadRequestException,
   Inject,
 } from '@nestjs/common';
-import { UpdateCustomerDto, CreateCustomerDto } from '@ports/application/dto';
-import { CustomersServiceProtocol } from '@ports/application/protocols';
+import { UpdateCustomerDto, CreateCustomerDto } from '@domain/dtos';
+import { CustomersServiceProtocol } from '@domain/protocols';
 import { CUSTOMER_SERVICE } from '@adapters/constants';
 
 @Controller('customers')

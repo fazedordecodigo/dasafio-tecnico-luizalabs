@@ -1,11 +1,11 @@
 import { Inject, Injectable } from '@nestjs/common';
-import { CreateCustomerDto, UpdateCustomerDto } from '@ports/application/dto';
+import { CreateCustomerDto, UpdateCustomerDto } from '@domain/dtos';
 import {
   CustomersRepositoryProtocol,
   CustomersServiceProtocol,
-} from '@ports/application/protocols';
+} from '@domain/protocols';
 import { CUSTOMER_REPOSITORY } from '@adapters/constants';
-import { Customer, Notification } from '@ports/domain/entities';
+import { Customer, Notification } from '@domain/entities';
 import { Result } from 'typescript-result';
 import { CustomerDto } from '@adapters/dtos';
 

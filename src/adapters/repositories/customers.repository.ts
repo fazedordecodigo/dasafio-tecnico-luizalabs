@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from '@adapters/services';
-import { CustomersRepositoryProtocol } from '@ports/application/protocols';
+import { CustomersRepositoryProtocol } from '@domain/protocols';
 import { CustomerDto } from '@adapters/dtos';
 
 @Injectable()

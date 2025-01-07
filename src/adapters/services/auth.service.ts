@@ -2,8 +2,8 @@ import * as bcrypt from 'bcrypt';
 import { JwtService } from '@nestjs/jwt';
 import { Inject, Injectable, UnauthorizedException } from '@nestjs/common';
 import { USER_REPOSITORY } from '@adapters/constants';
-import { SignInAuthDto } from '@ports/application/dto';
-import { UsersRepositoryProtocol } from '@ports/application/protocols';
+import { SignInAuthDto } from '@domain/dtos';
+import { UsersRepositoryProtocol } from '@domain/protocols';
 
 @Injectable()
 export class AuthService {

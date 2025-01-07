@@ -9,7 +9,7 @@ import {
   CustomersService,
   ProductsService,
   UsersService,
-} from '@ports/application/services';
+} from '@domain/services';
 
 @Module({
   imports: [forwardRef(() => AdaptersModule)],

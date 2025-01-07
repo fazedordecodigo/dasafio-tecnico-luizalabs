@@ -1,8 +1,8 @@
 import { faker } from '@faker-js/faker/locale/pt_BR';
 import { USER_REPOSITORY } from '@adapters/constants';
 import { Test, TestingModule } from '@nestjs/testing';
-import { UsersService } from '@ports/application/services';
-import { UsersRepositoryProtocol } from '@ports/application/protocols';
+import { UsersService } from '@domain/services';
+import { UsersRepositoryProtocol } from '@domain/protocols';
 import { userFake } from '../fakers/user.faker';
 import { Result } from 'typescript-result';
 

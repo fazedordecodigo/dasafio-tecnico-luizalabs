@@ -8,9 +8,9 @@ import {
   Query,
 } from '@nestjs/common';
 import { USER_SERVICE } from '@adapters/constants';
-import { UsersServiceProtocol } from '@ports/application/protocols';
-import { CreateUserDto, GetByEmailUserDto } from '@ports/application/dto';
-import { Role } from '@ports/domain/entities/enums';
+import { UsersServiceProtocol } from '@domain/protocols';
+import { CreateUserDto, GetByEmailUserDto } from '@domain/dtos';
+import { Role } from '@domain/entities/enums';
 import { Public, Roles } from '@adapters/decorators';
 
 @Controller('users')

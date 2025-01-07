@@ -3,15 +3,15 @@ import * as bcrypt from 'bcrypt';
 import {
   UsersRepositoryProtocol,
   UsersServiceProtocol,
-} from '@ports/application/protocols';
+} from '@domain/protocols';
 import { USER_REPOSITORY } from '@adapters/constants';
 import {
   CreateUserDto,
   GetByEmailUserDto,
   GetByEmailUserResultDto,
-} from '@ports/application/dto';
+} from '@domain/dtos';
 import { Result } from 'typescript-result';
-import { User, Notification } from '@ports/domain/entities';
+import { User, Notification } from '@domain/entities';
 
 @Injectable()
 export class UsersService implements UsersServiceProtocol {

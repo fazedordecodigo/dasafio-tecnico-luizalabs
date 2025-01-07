@@ -1,0 +1,1 @@
+export { Role } from '@domain/entities/enums/role.enum';
