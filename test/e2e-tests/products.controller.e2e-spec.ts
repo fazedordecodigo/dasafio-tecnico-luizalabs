@@ -1,11 +1,11 @@
-import { Test, TestingModule } from '@nestjs/testing';
-import { INestApplication } from '@nestjs/common';
 import * as request from 'supertest';
-import { PrismaService } from '@adapters/services';
-import { prismaService } from './setup-tests.e2e';
-import { AppModule } from '../../src/app.module';
-import { ProductsController } from '@adapters/controllers';
+import { INestApplication } from '@nestjs/common';
 import { faker } from '@faker-js/faker/locale/pt_BR';
+import { Test, TestingModule } from '@nestjs/testing';
+import { AppModule } from '../../src/app.module';
+import { prismaService } from './setup-tests.e2e';
+import { PrismaService } from '@adapters/services';
+import { ProductsController } from '@adapters/controllers';
 
 describe('ProductsController (e2e)', () => {
   let app: INestApplication;
