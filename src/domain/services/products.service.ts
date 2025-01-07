@@ -1,10 +1,6 @@
 import { PRODUCT_REPOSITORY } from '@adapters/constants';
 import { Inject, Injectable, Logger } from '@nestjs/common';
-import {
-  CreateProductDto,
-  ReturnProductDto,
-  UpdateProductDto,
-} from '@domain/dtos';
+import { GetAllProductsDto, ReturnProductDto } from '@domain/dtos';
 import {
   ProductsRepositoryProtocol,
   ProductsServiceProtocol,
@@ -22,7 +18,9 @@ export class ProductsService implements ProductsServiceProtocol {
     private readonly productsRepository: ProductsRepositoryProtocol,
   ) {}
 
-  public async getById(id: string): Promise<Result<ReturnProductDto, Notification>> {
+  public async getById(
+    id: string,
+  ): Promise<Result<ReturnProductDto, Notification>> {
     this._logger.log(`Getting product by id: ${id}`);
     const product = await this.productsRepository.getById(id);
     if (!product) {
@@ -39,12 +37,10 @@ export class ProductsService implements ProductsServiceProtocol {
       reviewScore: product.reviewScore,
     });
   }
-  public async getAll(
-    skip?: number,
-    take?: number,
-  ): Promise<Result<ReturnProductDto[], Notification>> {
+  public async getAll(dto: GetAllProductsDto): Promise<Result<ReturnProductDto[], Notification>> {
     this._logger.log(`Getting all products`);
-    const products = await this.productsRepository.getAll(skip, take)
+    const { skip, take } = dto;
+    const products = await this.productsRepository.getAll(skip, take);
     this._logger.log(`Products found: ${products.length}`);
     return Result.ok(
       products.map((product) => ({

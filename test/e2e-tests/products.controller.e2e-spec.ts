@@ -1,5 +1,5 @@
 import * as request from 'supertest';
-import { INestApplication } from '@nestjs/common';
+import { INestApplication, ValidationPipe } from '@nestjs/common';
 import { faker } from '@faker-js/faker/locale/pt_BR';
 import { Test, TestingModule } from '@nestjs/testing';
 import { AppModule } from '../../src/app.module';
@@ -12,7 +12,7 @@ describe('ProductsController (e2e)', () => {
   let controller: ProductsController;
   let token: string;
   const email: string = faker.internet.email();
-  const password: string = faker.internet.password();
+  const password: string = faker.internet.password({ length: 32, pattern: /[A-Za-z0-9!@#$%^&*()\-_=+\[\]{};:'",.<>?/\\|`~ ]*/ });
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
@@ -24,6 +24,11 @@ describe('ProductsController (e2e)', () => {
 
     controller = module.get<ProductsController>(ProductsController);
     app = module.createNestApplication();
+    app.useGlobalPipes(new ValidationPipe(
+      {
+        transform: true,
+      }
+    ));
     await app.init();
 
     await request(app.getHttpServer())
@@ -54,6 +59,18 @@ describe('ProductsController (e2e)', () => {
       .expect('Content-Type', /json/)
       .expect((response) => {
         expect(response.body).toBeInstanceOf(Array);
+      });
+  });
+
+  it('/products?take=xx&skip=xx (GET)', async () => {
+    return await request(app.getHttpServer())
+      .get('/products?skip=0&take=5')
+      .auth(token, { type: 'bearer' })
+      .expect(200)
+      .expect('Content-Type', /json/)
+      .expect((response) => {
+        expect(response.body).toBeInstanceOf(Array)
+        expect(response.body.length).toBeLessThanOrEqual(5)
       });
   });
 

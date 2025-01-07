@@ -1,14 +1,25 @@
 import { PRODUCT_SERVICE } from '@adapters/constants';
-import { Controller, Get, Param, Inject, BadRequestException } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Param,
+  Inject,
+  BadRequestException,
+  Query,
+} from '@nestjs/common';
 import { ProductsServiceProtocol } from '@domain/protocols';
+import { GetAllProductsDto } from '@domain/dtos';
 
 @Controller('products')
 export class ProductsController {
-  constructor(@Inject(PRODUCT_SERVICE) private readonly productsService: ProductsServiceProtocol) {}
+  constructor(
+    @Inject(PRODUCT_SERVICE)
+    private readonly productsService: ProductsServiceProtocol,
+  ) {}
 
   @Get()
-  async getAll() {
-    const result = await this.productsService.getAll();
+  public async getAll(@Query() query: GetAllProductsDto) {
+    const result = await this.productsService.getAll(query);
     if (result.isOk()) return result.value;
 
     throw new BadRequestException('BadRequest', {
@@ -18,7 +29,7 @@ export class ProductsController {
   }
 
   @Get(':id')
-  async getById(@Param('id') id: string) {
+  public async getById(@Param('id') id: string) {
     const result = await this.productsService.getById(id);
     if (result.isOk()) return result.value;
 
