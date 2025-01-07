@@ -35,10 +35,24 @@ model Product {
   brand       String
   price       Float
   image       String
-  reviewScore Float
+  review      Review[]
   customers   Customer[]
   createdAt   DateTime
   updatedAt   DateTime?
   isDeleted   Boolean
   deletedAt   DateTime?
+}
+
+model Review {
+  id        String   @id
+  title     String
+  content   String
+  customer  String
+  score     Float
+  product   Product  @relation(fields: [productId], references: [id])
+  productId String
+  createdAt DateTime
+  updatedAt DateTime?
+  isDeleted Boolean
+  deletedAt DateTime?
 }
