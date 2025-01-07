@@ -3,3 +3,4 @@ export { Notification } from '@domain/entities/notification.entity';
 export { Customer } from '@domain/entities/customer.entity';
 export { Product } from '@domain/entities/product.entity';
 export { Entity } from '@domain/entities/entity';
+export { Review } from '@domain/entities/review.entity';

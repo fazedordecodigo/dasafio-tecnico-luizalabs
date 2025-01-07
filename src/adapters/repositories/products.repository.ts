@@ -13,8 +13,12 @@ export class ProductsRepository implements ProductsRepositoryProtocol {
 
   async getById(id: string): Promise<ProductDto | null> {
     try {
+      this._logger.log('Getting product by id', 'ProductsRepository.getById');
       return await this.prisma.product.findUnique({
         where: { id },
+        include: {
+          reviews: true,
+        },
       });
     } catch (error) {
       this._logger.error(error, 'ProductsRepository.getById');
@@ -25,7 +29,13 @@ export class ProductsRepository implements ProductsRepositoryProtocol {
   async getAll(skip?: number, take?: number): Promise<ProductDto[]> {
     try {
       this._logger.log('Getting all products', 'ProductsRepository.getAll');
-      return await this.prisma.product.findMany({ skip, take });
+      return await this.prisma.product.findMany({
+        skip,
+        take,
+        include: {
+          reviews: true,
+        },
+      });
     } catch (error) {
       this._logger.error(error, 'ProductsRepository.getAll');
       throw error;
