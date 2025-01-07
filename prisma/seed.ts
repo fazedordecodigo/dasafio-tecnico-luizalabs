@@ -2,6 +2,7 @@ import { v7 } from 'uuid';
 import * as bcrypt from 'bcrypt';
 import { PrismaClient } from '@prisma/client';
 import { faker } from '@faker-js/faker/locale/pt_BR';
+import { env } from 'process';
 
 const prisma = new PrismaClient();
 
@@ -9,7 +10,7 @@ async function main() {
   await prisma.product.createMany({
     data: [
       {
-        id: v7(),
+        id: process.env.ID_PRODUCT_TO_GET_TEST_E2E,
         title: faker.commerce.productName(),
         brand: faker.company.name(),
         price: Number(faker.commerce.price()),

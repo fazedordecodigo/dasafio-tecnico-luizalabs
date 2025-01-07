@@ -43,7 +43,7 @@ afterAll(async () => {
 });
 
 beforeEach(async () => {
-  // drop schema and create a new one
+  console.log("drop schema and create a new one");
   execSync(`npx prisma migrate reset --force`, {
     env: {
       ...process.env,
@@ -59,6 +59,7 @@ beforeEach(async () => {
 });
 
 afterEach(() => {
+  console.log("restore all mocks");
   jest.restoreAllMocks();
 });
 

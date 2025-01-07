@@ -1,12 +1,12 @@
 import { Module } from '@nestjs/common';
-import { PortsModule } from 'src/domain/ports.module';
 import { AdaptersModule } from '@adapters/adapters.module';
 import { ThrottlerModule } from '@nestjs/throttler';
 import { ConfigModule } from '@nestjs/config';
+import { DomainModule } from '@domain/domain.module';
 
 @Module({
   imports: [
-    PortsModule,
+    DomainModule,
     AdaptersModule,
     ConfigModule.forRoot({
       isGlobal: true,

@@ -9,6 +9,6 @@
   },
     "moduleNameMapper": {
       "^@adapters(.*)$": "<rootDir>/src/adapters/$1",
-      "^@ports(.*)$": "<rootDir>/src/ports/$1"
+      "^@domain(.*)$": "<rootDir>/src/domain/$1"
     }
 }

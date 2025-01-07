@@ -3,7 +3,7 @@ import { JwtModule } from '@nestjs/jwt';
 import { APP_GUARD } from '@nestjs/core';
 import { ThrottlerGuard } from '@nestjs/throttler';
 import { ConfigModule, ConfigService } from '@nestjs/config';
-import { PortsModule } from '@domain/ports.module';
+import { DomainModule } from '@domain/domain.module';
 import {
   CUSTOMER_REPOSITORY,
   PRODUCT_REPOSITORY,
@@ -31,7 +31,7 @@ import { AuthService, PrismaService } from '@adapters/services';
     UsersController,
   ],
   imports: [
-    forwardRef(() => PortsModule),
+    forwardRef(() => DomainModule),
     ConfigModule,
     JwtModule.registerAsync({
       global: true,

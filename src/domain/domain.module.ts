@@ -34,4 +34,4 @@ import {
     PRODUCT_SERVICE,
   ],
 })
-export class PortsModule {}
+export class DomainModule {}
