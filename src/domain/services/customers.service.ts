@@ -1,6 +1,6 @@
 import { Inject, Injectable, Logger } from '@nestjs/common';
 import {
-  FavoritesDto,
+  FavoriteDto,
   CreateCustomerDto,
   GetAllDto,
   ResponseCustomerDto,
@@ -10,8 +10,9 @@ import {
 import {
   CustomersRepositoryProtocol,
   CustomersServiceProtocol,
+  ProductsRepositoryProtocol,
 } from '@domain/protocols';
-import { CUSTOMER_REPOSITORY } from '@adapters/constants';
+import { CUSTOMER_REPOSITORY, PRODUCT_REPOSITORY } from '@adapters/constants';
 import { Customer, Notification } from '@domain/entities';
 import { Result } from 'typescript-result';
 import { mapToDto } from '@domain/mappers';
@@ -24,6 +25,8 @@ export class CustomersService implements CustomersServiceProtocol {
   constructor(
     @Inject(CUSTOMER_REPOSITORY)
     private readonly _repository: CustomersRepositoryProtocol,
+    @Inject(PRODUCT_REPOSITORY)
+    private readonly _productRepository: ProductsRepositoryProtocol,
   ) {}
 
   public async getByEmail(
@@ -44,37 +47,31 @@ export class CustomersService implements CustomersServiceProtocol {
     }
   }
 
-  public async removeFavorites(
+  public async removeFavorite(
     id: string,
-    favorites: FavoritesDto[],
-  ): Promise<Result<ResponseCustomerWithFavoriteDto, Notification[]>> {
+    favorite: FavoriteDto,
+  ): Promise<Result<ResponseCustomerWithFavoriteDto, Notification>> {
     try {
       this._logger.log(`Removing favorites from customer: ${id}`);
-      const notifications: Notification[] = [];
-      const favoritesIds: string[] = [];
       const customer = await this._repository.getById(id);
       if (!customer) {
-        return Result.error([{ message: 'Customer not found' }]);
+        return Result.error({ message: 'Customer not found' });
       }
-      favorites.map((favorite) => {
-        const favoriteExistes = customer.favoriteExists(favorite.id);
-        favoritesIds.push(favorite.id);
-        if (!favoriteExistes) {
-          notifications.push({
-            message: `Product ${favorite.id} not exists in favorites`,
-          });
-        }
-      });
-      if (notifications.length > 0) {
-        return Result.error(notifications);
+      const productExistes = await this._productRepository.getById(favorite.id);
+      const favoriteExistes = customer.favoriteExists(favorite.id);
+
+      if (!productExistes) {
+        return Result.error({ message: 'Product not exists' });
       }
-      const result = await this._repository.addFavorites(
-        customer.id,
-        favoritesIds,
-      );
+
+      if (!favoriteExistes) {
+        return Result.error({ message: 'Product not exists in favorites' });
+      }
+
+      const result = await this._repository.removeFavorite(customer.id, favorite.id);
       return Result.ok(mapToDto(result));
     } catch (error) {
-      return Result.error([{ message: 'Error removing favorites' }]);
+      return Result.error({ message: 'Error removing favorites' });
     }
   }
 
@@ -134,36 +131,31 @@ export class CustomersService implements CustomersServiceProtocol {
     }
   }
 
-  public async addFavorites(
+  public async addFavorite(
     id: string,
-    favorites: FavoritesDto[],
-  ): Promise<Result<ResponseCustomerWithFavoriteDto, Notification[]>> {
+    favorite: FavoriteDto,
+  ): Promise<Result<ResponseCustomerWithFavoriteDto, Notification>> {
     try {
-      const notifications: Notification[] = [];
-      const favoritesIds: string[] = [];
       const customer = await this._repository.getById(id);
       if (!customer) {
-        return Result.error([{ message: 'Customer not found' }]);
+        return Result.error({ message: 'Customer not found' });
       }
-      favorites.map((favorite) => {
-        const favoriteExistes = customer.favoriteExists(favorite.id);
-        favoritesIds.push(favorite.id);
-        if (favoriteExistes) {
-          notifications.push({
-            message: `Product ${favorite.id} already exists in favorites`,
-          });
-        }
-      });
-      if (notifications.length > 0) {
-        return Result.error(notifications);
+
+      const productExistes = await this._productRepository.getById(favorite.id);
+      const favoriteExistes = customer.favoriteExists(favorite.id);
+
+      if (!productExistes) {
+        return Result.error({ message: 'Product not exists' });
       }
-      const result = await this._repository.addFavorites(
-        customer.id,
-        favoritesIds,
-      );
+
+      if (favoriteExistes) {
+        return Result.error({ message: 'Product already exists in favorites' });
+      }
+
+      const result = await this._repository.addFavorite(customer.id, favorite.id);
       return Result.ok(mapToDto(result));
     } catch (error) {
-      return Result.error([{ message: 'Error adding favorites' }]);
+      return Result.error({ message: 'Error adding favorites' });
     }
   }
 

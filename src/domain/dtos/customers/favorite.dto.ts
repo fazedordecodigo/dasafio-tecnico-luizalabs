@@ -1,6 +1,6 @@
 import { IsNotEmpty, IsUUID } from "class-validator";
 
-export class FavoritesDto {
+export class FavoriteDto {
   @IsNotEmpty()
   @IsUUID()
   id: string;

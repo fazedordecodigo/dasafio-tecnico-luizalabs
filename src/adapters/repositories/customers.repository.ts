@@ -31,18 +31,18 @@ export class CustomersRepository implements CustomersRepositoryProtocol {
     }
   }
 
-  public async addFavorites(
+  public async addFavorite(
     id: string,
-    favorites: string[],
+    favoriteId: string,
   ): Promise<Customer> {
     try {
-      this._logger.log(`Adding favorites to customer: ${id}`);
+      this._logger.log(`Adding favorite to customer: ${id}`);
       const response = await this.prisma.customer.update({
         where: { id, isDeleted },
         data: {
           updatedAt: new Date(),
           favorites: {
-            connect: favorites.map((favorite) => ({ id: favorite })),
+            connect: { id: favoriteId },
           },
         },
         include: {
@@ -53,28 +53,28 @@ export class CustomersRepository implements CustomersRepositoryProtocol {
           },
         },
       });
-      this._logger.log(`Favorites added to customer: ${id}`);
+      this._logger.log(`Favorite added to customer: ${id}`);
       return mapToEntityFull(response);
     } catch (error) {
       this._logger.error(
-        `Error adding favorites to customer: ${error.message}`,
+        `Error adding favorite to customer: ${error.message}`,
       );
       throw error;
     }
   }
 
-  public async removeFavorites(
+  public async removeFavorite(
     id: string,
-    favorites: string[],
+    favoriteId: string,
   ): Promise<Customer> {
     try {
-      this._logger.log(`Removing favorites from customer: ${id}`);
+      this._logger.log(`Removing favorite from customer: ${id}`);
       const response = await this.prisma.customer.update({
         where: { id, isDeleted },
         data: {
           updatedAt: new Date(),
           favorites: {
-            disconnect: favorites.map((favorite) => ({ id: favorite })),
+            disconnect: { id: favoriteId }
           },
         },
         include: {
@@ -85,11 +85,11 @@ export class CustomersRepository implements CustomersRepositoryProtocol {
           },
         },
       });
-      this._logger.log(`Favorites removed from customer: ${id}`);
+      this._logger.log(`Favorite removed from customer: ${id}`);
       return mapToEntityFull(response);
     } catch (error) {
       this._logger.error(
-        `Error removing favorites from customer: ${error.message}`,
+        `Error removing favorite from customer: ${error.message}`,
       );
       throw error;
     }
