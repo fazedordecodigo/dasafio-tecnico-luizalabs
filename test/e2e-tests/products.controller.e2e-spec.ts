@@ -70,7 +70,7 @@ describe('ProductsController (e2e)', () => {
       .expect('Content-Type', /json/)
       .expect((response) => {
         expect(response.body).toBeInstanceOf(Array)
-        expect(response.body.length).toBeLessThanOrEqual(5)
+        expect(response.body.length).toBeLessThanOrEqual(3)
       });
   });
 
@@ -86,13 +86,13 @@ describe('ProductsController (e2e)', () => {
         expect(response.body).toHaveProperty('brand')
         expect(response.body).toHaveProperty('price')
         expect(response.body).toHaveProperty('image')
-        expect(response.body).toHaveProperty('reviewScore')
         expect(response.body.id).toBe(process.env.ID_PRODUCT_TO_GET_TEST_E2E)
         expect(response.body.title).not.toBeNull()
         expect(response.body.brand).not.toBeNull()
         expect(response.body.price).not.toBeNull()
         expect(response.body.image).not.toBeNull()
-        expect(response.body.reviewScore).not.toBeNull()
+        expect(response.body.reviews).toBeInstanceOf(Array)
+        expect(response.body.reviews.length).toBeLessThanOrEqual(3)
       });
   });
 });
