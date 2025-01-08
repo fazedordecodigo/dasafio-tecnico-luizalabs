@@ -3,5 +3,5 @@ export interface RepositoryProtocol <T> {
     getAll(skip?: number, take?: number): Promise<T[]>
     create(data: T): Promise<T>
     update(data: T): Promise<T>
-    delete(id: string): Promise<T>
+    delete(id: string): Promise<void>
 }

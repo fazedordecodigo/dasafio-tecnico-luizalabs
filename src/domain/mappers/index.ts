@@ -1,0 +1,1 @@
+export * from '@domain/mappers/customer.mapper';

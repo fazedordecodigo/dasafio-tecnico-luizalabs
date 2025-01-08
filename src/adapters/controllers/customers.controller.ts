@@ -34,7 +34,7 @@ export class CustomersController {
 
   @Get()
   public async getAll(@Query() query: GetAllDto) {
-    const result = await this.customersService.getAll();
+    const result = await this.customersService.getAll(query);
     if (result.isOk()) return result.value;
 
     throw new BadRequestException('BadRequest', {

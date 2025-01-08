@@ -1,6 +1,6 @@
 import { PRODUCT_REPOSITORY } from '@adapters/constants';
 import { Inject, Injectable, Logger } from '@nestjs/common';
-import { GetAllProductsDto, ReturnProductDto } from '@domain/dtos';
+import { GetAllDto, ReturnProductDto } from '@domain/dtos';
 import {
   ProductsRepositoryProtocol,
   ProductsServiceProtocol,
@@ -43,26 +43,25 @@ export class ProductsService implements ProductsServiceProtocol {
       })),
     });
   }
-  public async getAll(dto: GetAllProductsDto): Promise<Result<ReturnProductDto[], Notification>> {
+  public async getAll(dto: GetAllDto): Promise<Result<ReturnProductDto[], Notification>> {
     this._logger.log(`Getting all products`);
     const { skip, take } = dto;
     const products = await this.productsRepository.getAll(skip, take);
     this._logger.log(`Products found: ${products.length}`);
-    return Result.ok(
-      products.map((product) => ({
-        id: product.id,
-        title: product.title,
-        brand: product.brand,
-        price: product.price,
-        image: product.image,
-        reviews: product.reviews.map((review) => ({
-          id: review.id,
-          title: review.title,
-          content: review.content,
-          customer: review.customer,
-          score: review.score,
-        })),
+    const productsDto = products.map((product) => ({
+      id: product.id,
+      title: product.title,
+      brand: product.brand,
+      price: product.price,
+      image: product.image,
+      reviews: product.reviews.map((review) => ({
+        id: review.id,
+        title: review.title,
+        content: review.content,
+        customer: review.customer,
+        score: review.score,
       })),
-    );
+    }));
+    return Result.ok(productsDto);
   }
 }

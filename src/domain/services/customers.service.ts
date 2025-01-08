@@ -1,5 +1,5 @@
-import { Inject, Injectable } from '@nestjs/common';
-import { CreateCustomerDto, UpdateCustomerDto } from '@domain/dtos';
+import { Inject, Injectable, Logger } from '@nestjs/common';
+import { CreateCustomerDto, GetAllDto, ResponseCustomerDto, ResponseCustomerWithFavoriteDto, UpdateCustomerDto } from '@domain/dtos';
 import {
   CustomersRepositoryProtocol,
   CustomersServiceProtocol,
@@ -7,65 +7,81 @@ import {
 import { CUSTOMER_REPOSITORY } from '@adapters/constants';
 import { Customer, Notification } from '@domain/entities';
 import { Result } from 'typescript-result';
-import { CustomerDto } from '@adapters/dtos';
+import { mapToDto } from '@domain/mappers';
 
 @Injectable()
 export class CustomersService implements CustomersServiceProtocol {
+  private readonly _logger = new Logger(CustomersService.name, {
+    timestamp: true,
+  });
   constructor(
     @Inject(CUSTOMER_REPOSITORY)
     private readonly _repository: CustomersRepositoryProtocol,
-  ) {}
+  ) { }
 
-  async getById(id: string): Promise<Result<CustomerDto, Notification>> {
+  public async getById(id: string): Promise<Result<ResponseCustomerWithFavoriteDto, Notification>> {
     try {
+      this._logger.log(`Getting customer by id: ${id}`);
       const customer = await this._repository.getById(id);
       if (!customer) {
+        this._logger.warn(`Customer not found`);
         return Result.error({ message: 'Customer not found' });
       }
-      return Result.ok(customer);
+      this._logger.log(`Customer found: ${customer.name}`);
+      return Result.ok(mapToDto(customer));
     } catch (error) {
+      this._logger.error(`Error fetching customer: ${error.message}`);
       return Result.error({ message: 'Error fetching customer' });
     }
   }
 
-  async getAll(skip = 0, take = 10): Promise<Result<CustomerDto[], Notification>> {
+  public async getAll(payload: GetAllDto): Promise<Result<ResponseCustomerDto[], Notification>> {
     try {
+      const { skip, take } = payload;
       const customers = await this._repository.getAll(skip, take);
-      return Result.ok(customers);
+      return Result.ok(customers.map((customer) => ({
+        id: customer.id,
+        name: customer.name,
+        email: customer.email,
+      })));
     } catch (error) {
       return Result.error({ message: 'Error fetching customers' });
     }
   }
 
-  async create(
+  public async create(
     data: CreateCustomerDto,
-  ): Promise<Result<CustomerDto, Notification>> {
+  ): Promise<Result<ResponseCustomerDto, Notification>> {
     try {
       const customer = new Customer(data.name, data.email);
       const result = await this._repository.create(customer);
-      return Result.ok(result);
+      return Result.ok({
+        id: result.id,
+        name: result.name,
+        email: result.email,
+      });
     } catch (error) {
       return Result.error({ message: 'Error creating customer' });
     }
   }
 
-  async update(
+  public async update(
     id: string,
     data: UpdateCustomerDto,
-  ): Promise<Result<void, Notification>> {
+  ): Promise<Result<ResponseCustomerDto, Notification>> {
     try {
       const customer = new Customer(data.name, data.email, id);
       const result = await this._repository.update(customer);
       if (!result) {
         return Result.error({ message: 'Customer not found' });
       }
-      return Result.ok();
+      return Result.ok(mapToDto(result));
     } catch (error) {
       return Result.error({ message: 'Error updating customer' });
     }
   }
 
-  async delete(id: string): Promise<Result<void, Notification>> {
+  public async delete(id: string): Promise<Result<void, Notification>> {
     try {
       await this._repository.delete(id);
       return Result.ok();

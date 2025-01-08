@@ -1,12 +1,11 @@
 import { Result } from "typescript-result"
-import { CreateCustomerDto, UpdateCustomerDto } from "@domain/dtos"
+import { CreateCustomerDto, GetAllDto, ResponseCustomerDto, ResponseCustomerWithFavoriteDto, UpdateCustomerDto } from "@domain/dtos"
 import { Notification } from "@domain/entities"
-import { CustomerDto } from "@adapters/dtos"
 
 export interface CustomersServiceProtocol {
-    getById(id: string): Promise<Result<CustomerDto, Notification>>
-    getAll(skip?: number, take?: number): Promise<Result<CustomerDto[], Notification>>
-    create(data: CreateCustomerDto): Promise<Result<CustomerDto, Notification>>
-    update(id: string, data: UpdateCustomerDto): Promise<Result<void, Notification>>
+    getById(id: string): Promise<Result<ResponseCustomerWithFavoriteDto, Notification>>
+    getAll(payload: GetAllDto): Promise<Result<ResponseCustomerDto[], Notification>>
+    create(data: CreateCustomerDto): Promise<Result<ResponseCustomerDto, Notification>>
+    update(id: string, data: UpdateCustomerDto): Promise<Result<ResponseCustomerDto, Notification>>
     delete(id: string): Promise<Result<void, Notification>>
 }
