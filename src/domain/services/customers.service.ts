@@ -1,6 +1,6 @@
 import { Inject, Injectable, Logger } from '@nestjs/common';
 import {
-  AddFavoritesDto,
+  FavoritesDto,
   CreateCustomerDto,
   GetAllDto,
   ResponseCustomerDto,
@@ -26,7 +26,9 @@ export class CustomersService implements CustomersServiceProtocol {
     private readonly _repository: CustomersRepositoryProtocol,
   ) {}
 
-  public async getByEmail(email: string): Promise<Result<ResponseCustomerDto, Notification>> {
+  public async getByEmail(
+    email: string,
+  ): Promise<Result<ResponseCustomerDto, Notification>> {
     try {
       this._logger.log(`Getting customer by email: ${email}`);
       const customer = await this._repository.getByEmail(email);
@@ -42,7 +44,10 @@ export class CustomersService implements CustomersServiceProtocol {
     }
   }
 
-  public async removeFavorites(id: string, favorites: AddFavoritesDto[]): Promise<Result<ResponseCustomerWithFavoriteDto, Notification[]>> {
+  public async removeFavorites(
+    id: string,
+    favorites: FavoritesDto[],
+  ): Promise<Result<ResponseCustomerWithFavoriteDto, Notification[]>> {
     try {
       this._logger.log(`Removing favorites from customer: ${id}`);
       const notifications: Notification[] = [];
@@ -131,7 +136,7 @@ export class CustomersService implements CustomersServiceProtocol {
 
   public async addFavorites(
     id: string,
-    favorites: AddFavoritesDto[],
+    favorites: FavoritesDto[],
   ): Promise<Result<ResponseCustomerWithFavoriteDto, Notification[]>> {
     try {
       const notifications: Notification[] = [];
