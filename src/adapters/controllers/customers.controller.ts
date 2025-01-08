@@ -8,8 +8,9 @@ import {
   Delete,
   BadRequestException,
   Inject,
+  Query,
 } from '@nestjs/common';
-import { UpdateCustomerDto, CreateCustomerDto } from '@domain/dtos';
+import { UpdateCustomerDto, CreateCustomerDto, GetAllDto } from '@domain/dtos';
 import { CustomersServiceProtocol } from '@domain/protocols';
 import { CUSTOMER_SERVICE } from '@adapters/constants';
 
@@ -21,7 +22,7 @@ export class CustomersController {
   ) {}
 
   @Post()
-  async create(@Body() createCustomerDto: CreateCustomerDto) {
+  public async create(@Body() createCustomerDto: CreateCustomerDto) {
     const result = await this.customersService.create(createCustomerDto);
     if (result.isOk()) return result.value;
 
@@ -32,7 +33,7 @@ export class CustomersController {
   }
 
   @Get()
-  async findAll() {
+  public async getAll(@Query() query: GetAllDto) {
     const result = await this.customersService.getAll();
     if (result.isOk()) return result.value;
 
@@ -43,7 +44,7 @@ export class CustomersController {
   }
 
   @Get(':id')
-  async findOne(@Param('id') id: string) {
+  public async getById(@Param('id') id: string) {
     const result = await this.customersService.getById(id);
     if (result.isOk()) return result.value;
 
@@ -54,7 +55,7 @@ export class CustomersController {
   }
 
   @Patch(':id')
-  async update(
+  public async update(
     @Param('id') id: string,
     @Body() updateCustomerDto: UpdateCustomerDto,
   ) {
@@ -68,7 +69,7 @@ export class CustomersController {
   }
 
   @Delete(':id')
-  async remove(@Param('id') id: string) {
+  public async delete(@Param('id') id: string) {
     const result = await this.customersService.delete(id);
     if (result.isOk()) return result.value;
 

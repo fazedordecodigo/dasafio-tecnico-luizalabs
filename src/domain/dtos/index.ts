@@ -5,4 +5,4 @@ export { CreateCustomerDto } from '@domain/dtos/customers/create-customer.dto';
 export { SignInAuthDto } from '@domain/dtos/signin/signin-auth.dto';
 export { UpdateCustomerDto } from '@domain/dtos/customers/update-customer.dto';
 export { ReturnProductDto } from '@domain/dtos/products/return-product.dto';
-export { GetAllProductsDto } from '@domain/dtos/products/get-all-products.dto';
+export { GetAllDto } from '@domain/dtos/get-all.dto';

@@ -8,7 +8,7 @@ import {
   Query,
 } from '@nestjs/common';
 import { ProductsServiceProtocol } from '@domain/protocols';
-import { GetAllProductsDto } from '@domain/dtos';
+import { GetAllDto } from '@domain/dtos';
 
 @Controller('products')
 export class ProductsController {
@@ -18,7 +18,7 @@ export class ProductsController {
   ) {}
 
   @Get()
-  public async getAll(@Query() query: GetAllProductsDto) {
+  public async getAll(@Query() query: GetAllDto) {
     const result = await this.productsService.getAll(query);
     if (result.isOk()) return result.value;
 
