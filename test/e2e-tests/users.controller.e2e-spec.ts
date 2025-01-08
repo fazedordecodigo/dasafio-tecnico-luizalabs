@@ -1,6 +1,6 @@
+import request from 'supertest';
 import { Test, TestingModule } from '@nestjs/testing';
 import { INestApplication } from '@nestjs/common';
-import * as request from 'supertest';
 import { faker } from '@faker-js/faker/locale/pt_BR';
 import { UsersController } from '@adapters/controllers/users.controller';
 import { PrismaService } from '@adapters/services/prisma.service';

@@ -8,7 +8,9 @@ import {
   Query,
 } from '@nestjs/common';
 import { ProductsServiceProtocol } from '@domain/protocols';
-import { GetAllDto } from '@domain/dtos';
+import { GetAllDto, ReturnProductDto } from '@domain/dtos';
+import { ApiNotFoundResponse, ApiOkResponse, ApiTags } from '@nestjs/swagger';
+import { Product } from '@domain/entities';
 
 @Controller('products')
 export class ProductsController {
@@ -18,6 +20,10 @@ export class ProductsController {
   ) {}
 
   @Get()
+  @ApiOkResponse({
+    type: Product,
+    isArray: true,
+  })
   public async getAll(@Query() query: GetAllDto) {
     const result = await this.productsService.getAll(query);
     if (result.isOk()) return result.value;
@@ -29,6 +35,13 @@ export class ProductsController {
   }
 
   @Get(':id')
+  @ApiOkResponse({
+    type: Product,
+    isArray: false,
+  })
+  @ApiNotFoundResponse({
+    description: 'Not Found',
+  })
   public async getById(@Param('id') id: string) {
     const result = await this.productsService.getById(id);
     if (result.isOk()) return result.value;
