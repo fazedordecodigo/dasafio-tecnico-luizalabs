@@ -11,7 +11,12 @@ import {
   Query,
   Put,
 } from '@nestjs/common';
-import { UpdateCustomerDto, CreateCustomerDto, GetAllDto, FavoritesDto } from '@domain/dtos';
+import {
+  UpdateCustomerDto,
+  CreateCustomerDto,
+  GetAllDto,
+  FavoriteDto,
+} from '@domain/dtos';
 import { CustomersServiceProtocol } from '@domain/protocols';
 import { CUSTOMER_SERVICE } from '@adapters/constants';
 
@@ -34,30 +39,27 @@ export class CustomersController {
   }
 
   @Post(':id/favorites')
-  public async addFavorite(
-    @Param('id') id: string,
-    @Body() body: FavoritesDto[],
-  ) {
-    const result = await this.customersService.addFavorites(id, body);
+  public async addFavorite(@Param('id') id: string, @Body() body: FavoriteDto) {
+    const result = await this.customersService.addFavorite(id, body);
     if (result.isOk()) return result.value;
 
     throw new BadRequestException('BadRequest', {
       cause: new Error(),
-      description: result.error.map((error) => error.message).toString(),
+      description: result.error.message,
     });
   }
 
   @Put(':id/favorites')
   public async removeFavorite(
     @Param('id') id: string,
-    @Body() body: FavoritesDto[],
+    @Body() body: FavoriteDto,
   ) {
-    const result = await this.customersService.removeFavorites(id, body);
+    const result = await this.customersService.removeFavorite(id, body);
     if (result.isOk()) return result.value;
 
     throw new BadRequestException('BadRequest', {
       cause: new Error(),
-      description: result.error.map((error) => error.message).toString(),
+      description: result.error.message,
     });
   }
 

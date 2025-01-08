@@ -22,11 +22,11 @@ export interface CustomersServiceProtocol {
   ): Promise<Result<ResponseCustomerDto, Notification>>;
   addFavorite(
     id: string,
-    favorites: FavoriteDto,
+    favorite: FavoriteDto,
   ): Promise<Result<ResponseCustomerWithFavoriteDto, Notification>>;
   removeFavorite(
     id: string,
-    favorites: FavoriteDto,
+    favorite: FavoriteDto,
   ): Promise<Result<ResponseCustomerWithFavoriteDto, Notification>>;
   update(
     id: string,
