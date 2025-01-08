@@ -20,6 +20,8 @@
     "strictBindCallApply": false,
     "forceConsistentCasingInFileNames": false,
     "noFallthroughCasesInSwitch": false,
+    "resolveJsonModule": true,
+    "esModuleInterop": true,
     "allowJs": false,
     "paths": {
       "@adapters/*": ["src/adapters/*"],

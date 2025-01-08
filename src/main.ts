@@ -19,11 +19,17 @@ async function bootstrap() {
     .setTitle('Desafio Luizalabs')
     .setDescription('Api para cadastro de clientes e lista de produtos favoritos')
     .setVersion('1.0')
-    .addTag('customers, products, favorites')
+    .addBearerAuth()
     .build();
   const documentFactory = () => SwaggerModule.createDocument(app, config);
   SwaggerModule.setup('swagger', app, documentFactory), {
-    jsonDocumentUrl: 'swagger/json'
+    jsonDocumentUrl: 'swagger/json',
+    jsonEditor: true,
+    swaggerOptions: {
+      docExpansion: 'list',
+      filter: true,
+      showRequestDuration: true,
+    },
   };
 
   await app.listen(process.env.PORT ?? 3000);
