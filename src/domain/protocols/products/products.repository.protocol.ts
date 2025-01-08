@@ -1,4 +1,6 @@
-import { ProductDto } from "@adapters/dtos/products/product.dto";
-import { RepositoryProtocol } from "@domain/protocols";
+import { ProductDto } from "@adapters/dtos";
 
-export interface ProductsRepositoryProtocol extends RepositoryProtocol<ProductDto> {}
+export interface ProductsRepositoryProtocol {
+    getById(id: string): Promise<ProductDto | null>
+    getAll(skip?: number, take?: number): Promise<ProductDto[]>
+}

@@ -11,11 +11,12 @@ export class ProductsRepository implements ProductsRepositoryProtocol {
 
   constructor(private readonly prisma: PrismaService) {}
 
-  async getById(id: string): Promise<ProductDto | null> {
+  public async getById(id: string): Promise<ProductDto | null> {
     try {
+      const isDeleted = false;
       this._logger.log('Getting product by id', 'ProductsRepository.getById');
       return await this.prisma.product.findUnique({
-        where: { id },
+        where: { id, isDeleted },
         include: {
           reviews: true,
         },
@@ -26,8 +27,9 @@ export class ProductsRepository implements ProductsRepositoryProtocol {
     }
   }
 
-  async getAll(skip?: number, take?: number): Promise<ProductDto[]> {
+  public async getAll(skip?: number, take?: number): Promise<ProductDto[]> {
     try {
+      const isDeleted = false;
       this._logger.log('Getting all products', 'ProductsRepository.getAll');
       return await this.prisma.product.findMany({
         skip,
@@ -35,29 +37,11 @@ export class ProductsRepository implements ProductsRepositoryProtocol {
         include: {
           reviews: true,
         },
+        where: { isDeleted },
       });
     } catch (error) {
       this._logger.error(error, 'ProductsRepository.getAll');
       throw error;
     }
-  }
-
-  async create(data: ProductDto): Promise<ProductDto> {
-    return await this.prisma.product.create({
-      data,
-    });
-  }
-
-  async update(data: ProductDto): Promise<ProductDto> {
-    return await this.prisma.product.update({
-      data,
-      where: { id: data.id },
-    });
-  }
-
-  async delete(id: string): Promise<ProductDto> {
-    return await this.prisma.product.delete({
-      where: { id },
-    });
   }
 }

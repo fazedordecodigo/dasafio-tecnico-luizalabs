@@ -5,7 +5,7 @@ import {
   ProductsRepositoryProtocol,
   ProductsServiceProtocol,
 } from '@domain/protocols';
-import { Notification, Product } from '@domain/entities';
+import { Notification } from '@domain/entities';
 import { Result } from 'typescript-result';
 
 @Injectable()
@@ -16,7 +16,7 @@ export class ProductsService implements ProductsServiceProtocol {
   constructor(
     @Inject(PRODUCT_REPOSITORY)
     private readonly productsRepository: ProductsRepositoryProtocol,
-  ) {}
+  ) { }
 
   public async getById(
     id: string,
@@ -34,7 +34,13 @@ export class ProductsService implements ProductsServiceProtocol {
       brand: product.brand,
       price: product.price,
       image: product.image,
-      reviewScore: product.reviewScore,
+      reviews: product.reviews.map((review) => ({
+        id: review.id,
+        title: review.title,
+        content: review.content,
+        customer: review.customer,
+        score: review.score,
+      })),
     });
   }
   public async getAll(dto: GetAllProductsDto): Promise<Result<ReturnProductDto[], Notification>> {
@@ -49,7 +55,13 @@ export class ProductsService implements ProductsServiceProtocol {
         brand: product.brand,
         price: product.price,
         image: product.image,
-        reviewScore: product.reviewScore,
+        reviews: product.reviews.map((review) => ({
+          id: review.id,
+          title: review.title,
+          content: review.content,
+          customer: review.customer,
+          score: review.score,
+        })),
       })),
     );
   }
