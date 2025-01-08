@@ -1,8 +1,13 @@
 import { CustomerDto } from "@adapters/dtos";
-import { Customer, Product, Review } from "@domain/entities";
+import { Customer as Entity, Product, Review } from "@domain/entities";
+import { Customer } from "@prisma/client";
 
-export const mapToEntityFull = ((data: CustomerDto): Customer => {
-    const customer = new Customer(data.name, data.email, data.id);
+export const mapToEntity = ((data: Customer): Entity => {
+    return new Entity(data.name, data.email, data.id);
+});
+
+export const mapToEntityFull = ((data: CustomerDto): Entity => {
+    const customer = new Entity(data.name, data.email, data.id);
     data.favorites.map(favorite => {
         const product = new Product(
             favorite.title,
@@ -28,7 +33,7 @@ export const mapToEntityFull = ((data: CustomerDto): Customer => {
     return customer;
 });
 
-export const mapToDtoCreate = ((entity: Customer) => {
+export const mapToDtoCreate = ((entity: Entity) => {
     return {
         data: {
             id: entity.id,

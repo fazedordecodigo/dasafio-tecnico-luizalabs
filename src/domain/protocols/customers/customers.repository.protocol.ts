@@ -4,4 +4,5 @@ import { Customer } from "@domain/entities";
 export interface CustomersRepositoryProtocol extends RepositoryProtocol<Customer> {
     addFavorites(id: string, favorites: string[]): Promise<Customer>
     removeFavorites(id: string, favorites: string[]): Promise<Customer>
+    getByEmail(email: string): Promise<Customer | null>
 }
