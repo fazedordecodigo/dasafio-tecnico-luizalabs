@@ -1,7 +1,5 @@
 import { Product } from '@domain/entities';
 import { Entity } from './entity';
-import { Result } from 'typescript-result';
-import { Notification } from './notification.entity';
 
 export class Customer extends Entity {
   private _favorites?: Product[] = [];
@@ -18,18 +16,14 @@ export class Customer extends Entity {
     this.email = email;
   }
 
-  public addFavorite(product: Product): Result<void, Notification> {
-    const exists = this._favorites.find((p) => p.id === product.id);
-    if (exists) {
-      return Result.error({ message: 'Product already in favorites' });
-    }
-    this._favorites.push(product);
-    return Result.ok();
+  public favoriteExists(id: string): boolean {
+    return this._favorites?.some((favorite) => favorite.id === id) ?? false;
   }
 
-  public removeFavorite(product: Product): void {
-    this._favoritesRemoved.push(this._favorites.find((p) => p.id === product.id));
-    this._favorites = this._favorites.filter((p) => p.id !== product.id);
+  public addFavorite(product: Product): void {
+    if (!this.favoriteExists(product.id)) {
+      this._favorites.push(product);
+    }
   }
 
   public getFavorites(): Product[] {

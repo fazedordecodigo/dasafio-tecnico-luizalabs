@@ -10,7 +10,7 @@ import {
   Inject,
   Query,
 } from '@nestjs/common';
-import { UpdateCustomerDto, CreateCustomerDto, GetAllDto } from '@domain/dtos';
+import { UpdateCustomerDto, CreateCustomerDto, GetAllDto, AddFavoritesDto } from '@domain/dtos';
 import { CustomersServiceProtocol } from '@domain/protocols';
 import { CUSTOMER_SERVICE } from '@adapters/constants';
 
@@ -29,6 +29,20 @@ export class CustomersController {
     throw new BadRequestException('BadRequest', {
       cause: new Error(),
       description: result.error.message,
+    });
+  }
+
+  @Post(':id/favorites')
+  public async addFavoriteProduct(
+    @Param('id') id: string,
+    @Body() body: AddFavoritesDto[],
+  ) {
+    const result = await this.customersService.addFavorites(id, body);
+    if (result.isOk()) return result.value;
+
+    throw new BadRequestException('BadRequest', {
+      cause: new Error(),
+      description: result.error.map((error) => error.message).toString(),
     });
   }
 

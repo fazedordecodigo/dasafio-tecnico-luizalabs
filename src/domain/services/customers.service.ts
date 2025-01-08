@@ -1,5 +1,5 @@
 import { Inject, Injectable, Logger } from '@nestjs/common';
-import { CreateCustomerDto, GetAllDto, ResponseCustomerDto, ResponseCustomerWithFavoriteDto, UpdateCustomerDto } from '@domain/dtos';
+import { AddFavoritesDto, CreateCustomerDto, GetAllDto, ResponseCustomerDto, ResponseCustomerWithFavoriteDto, UpdateCustomerDto } from '@domain/dtos';
 import {
   CustomersRepositoryProtocol,
   CustomersServiceProtocol,
@@ -62,6 +62,32 @@ export class CustomersService implements CustomersServiceProtocol {
       });
     } catch (error) {
       return Result.error({ message: 'Error creating customer' });
+    }
+  }
+
+  public async addFavorites(id: string, favorites: AddFavoritesDto[]): Promise<Result<ResponseCustomerWithFavoriteDto, Notification[]>> {
+    try {
+      const notifications: Notification[] = [];
+      const favoritesIds: string[] = []
+      const customer = await this._repository.getById(id);
+      if (!customer) {
+        return Result.error([{ message: 'Customer not found' }]);
+      }
+      favorites.map((favorite) => {
+        const favoriteExistes = customer.favoriteExists(favorite.id)
+        favoritesIds.push(favorite.id);
+        if (favoriteExistes) {
+          notifications.push({ message: `Product ${favorite.id} already exists in favorites` });
+        }
+      });
+      if (notifications.length > 0) {
+        return Result.error(notifications);
+      }
+
+      const result = await this._repository.addFavorites(customer.id, favoritesIds);
+      return Result.ok(mapToDto(result));
+    } catch (error) {
+      return Result.error([{ message: 'Error adding favorites' }]);
     }
   }
 

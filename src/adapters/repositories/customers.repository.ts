@@ -11,6 +11,62 @@ export class CustomersRepository implements CustomersRepositoryProtocol {
   });
   constructor(private readonly prisma: PrismaService) { }
 
+  public async addFavorites(id: string, favorites: string[]): Promise<Customer> {
+    try {
+      this._logger.log(`Adding favorites to customer: ${id}`);
+      const isDeleted = false;
+      const response = await this.prisma.customer.update({
+        where: { id, isDeleted },
+        data: {
+          updatedAt: new Date(),
+          favorites: {
+            connect: favorites.map(favorite => ({ id: favorite }))
+          }
+        },
+        include: {
+          favorites: {
+            include: {
+              reviews: true,
+            }
+          },
+        }
+      });
+      this._logger.log(`Favorites added to customer: ${id}`);
+      return mapToEntityFull(response);
+    } catch (error) {
+      this._logger.error(`Error adding favorites to customer: ${error.message}`);
+      throw error;
+    }
+  }
+
+  public async removeFavorites(id: string, favorites: string[]): Promise<Customer> {
+    try {
+      this._logger.log(`Removing favorites from customer: ${id}`);
+      const isDeleted = false;
+      const response = await this.prisma.customer.update({
+        where: { id, isDeleted },
+        data: {
+          updatedAt: new Date(),
+          favorites: {
+            disconnect: favorites.map(favorite => ({ id: favorite }))
+          }
+        },
+        include: {
+          favorites: {
+            include: {
+              reviews: true,
+            }
+          },
+        }
+      })
+      this._logger.log(`Favorites removed from customer: ${id}`);
+      return mapToEntityFull(response);
+    } catch (error) {
+      this._logger.error(`Error removing favorites from customer: ${error.message}`);
+      throw error;
+    }
+  }
+
   public async getById(id: string): Promise<Customer | null> {
     try {
       this._logger.log(`Getting customer by id: ${id}`);
@@ -111,3 +167,7 @@ export class CustomersRepository implements CustomersRepositoryProtocol {
     }
   }
 }
+function mapToEntity(response: { id: string; email: string; name: string; createdAt: Date; updatedAt: Date | null; isDeleted: boolean; deletedAt: Date | null; }): Customer | PromiseLike<Customer> {
+  throw new Error('Function not implemented.');
+}
+
