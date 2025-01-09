@@ -3,8 +3,6 @@ import { Entity } from './entity';
 
 export class Customer extends Entity {
   private _favorites?: Product[] = [];
-  private _favoritesRemoved: Product[] = [];
-
 
   constructor(
     public name: string,
@@ -34,9 +32,5 @@ export class Customer extends Entity {
     this.name = data.name;
     this.email = data.email;
     this.updatedAt = new Date();
-  }
-
-  public getFavoritesRemoved(): Product[] {
-    return this._favoritesRemoved;
   }
 }
