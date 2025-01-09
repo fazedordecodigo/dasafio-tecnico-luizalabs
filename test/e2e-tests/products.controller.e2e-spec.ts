@@ -32,13 +32,8 @@ describe('ProductsController (e2e)', () => {
     await app.init();
 
     await request(app.getHttpServer())
-      .post('/users')
-      .send({ email, password, role: 'ADMIN' })
-      .expect(201);
-
-    await request(app.getHttpServer())
       .post('/auth/login')
-      .send({ email, password })
+      .send({ email: process.env.EMAIL_FAKE, password: process.env.PASSWORD_FAKE })
       .expect(201)
       .expect('Content-Type', /json/)
       .expect((response) => {
