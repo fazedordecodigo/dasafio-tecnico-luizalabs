@@ -1,12 +1,9 @@
-import { ApiPropertyOptional } from "@nestjs/swagger";
+import { ApiProperty, ApiPropertyOptional } from "@nestjs/swagger";
 import { Transform } from "class-transformer";
 import { IsNumber, IsOptional } from "class-validator";
 
 export class GetAllDto {
-    @ApiPropertyOptional({
-        type: Number,
-        description: 'This is an optional property',
-      })
+    @ApiProperty()
     @IsNumber()
     @IsOptional()
     @Transform(({ value }) => {
@@ -14,10 +11,7 @@ export class GetAllDto {
     })
     public skip: number;
 
-    @ApiPropertyOptional({
-        type: Number,
-        description: 'This is an optional property',
-      })
+    @ApiProperty()
     @IsNumber()
     @IsOptional()
     @Transform(({ value }) => {

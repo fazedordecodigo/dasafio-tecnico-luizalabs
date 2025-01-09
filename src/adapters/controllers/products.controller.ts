@@ -9,7 +9,7 @@ import {
 } from '@nestjs/common';
 import { ProductsServiceProtocol } from '@domain/protocols';
 import { GetAllDto, ReturnProductDto } from '@domain/dtos';
-import { ApiNotFoundResponse, ApiOkResponse, ApiTags } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiNotFoundResponse, ApiOkResponse, ApiOperation, ApiParam, ApiQuery, ApiTags } from '@nestjs/swagger';
 import { Product } from '@domain/entities';
 
 @Controller('products')
@@ -20,10 +20,14 @@ export class ProductsController {
   ) {}
 
   @Get()
+  @ApiBearerAuth()
+  @ApiOperation({ summary: 'Get all products' })
   @ApiOkResponse({
-    type: Product,
+    type: ReturnProductDto,
     isArray: true,
   })
+  @ApiQuery({ name: 'skip', required: false, type: Number, description: 'Number of records to skip' })
+  @ApiQuery({ name: 'take', required: false, type: Number, description: 'Number of records to take'})
   public async getAll(@Query() query: GetAllDto) {
     const result = await this.productsService.getAll(query);
     if (result.isOk()) return result.value;
@@ -35,13 +39,16 @@ export class ProductsController {
   }
 
   @Get(':id')
+  @ApiBearerAuth()
+  @ApiOperation({ summary: 'Get product by id' })
   @ApiOkResponse({
-    type: Product,
+    type: ReturnProductDto,
     isArray: false,
   })
   @ApiNotFoundResponse({
     description: 'Not Found',
   })
+  @ApiParam({ name: 'id', required: true, type: String, description: 'Product id' })
   public async getById(@Param('id') id: string) {
     const result = await this.productsService.getById(id);
     if (result.isOk()) return result.value;

@@ -1,16 +1,28 @@
-import { Review } from "@domain/entities";
+import { ApiProperty } from "@nestjs/swagger";
 
-export interface ReturnProductDto {
+export class Review {
+    @ApiProperty()
     id: string;
+    @ApiProperty()
     title: string;
+    @ApiProperty()
+    content: string;
+    @ApiProperty()
+    customer: string;
+    @ApiProperty()
+    score: number;
+}
+export class ReturnProductDto {
+    @ApiProperty()
+    id: string;
+    @ApiProperty()
+    title: string;
+    @ApiProperty()
     brand: string;
+    @ApiProperty()
     price: number;
+    @ApiProperty()
     image: string;
-    reviews: {
-        id: string;
-        title: string;
-        content: string;
-        customer: string;
-        score: number;
-    }[];
+    @ApiProperty()
+    reviews: Review[];
 }
