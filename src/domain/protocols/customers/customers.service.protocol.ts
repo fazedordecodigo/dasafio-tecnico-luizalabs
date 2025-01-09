@@ -1,11 +1,10 @@
 import { Result } from 'typescript-result';
 import {
   FavoriteDto,
-  CreateCustomerDto,
   GetAllDto,
   ResponseCustomerDto,
   ResponseCustomerWithFavoriteDto,
-  UpdateCustomerDto,
+  CustomerDto,
 } from '@domain/dtos';
 import { Notification } from '@domain/entities';
 
@@ -18,7 +17,7 @@ export interface CustomersServiceProtocol {
   ): Promise<Result<ResponseCustomerDto[], Notification>>;
   getByEmail(email: string): Promise<Result<ResponseCustomerDto, Notification>>;
   create(
-    data: CreateCustomerDto,
+    data: CustomerDto,
   ): Promise<Result<ResponseCustomerDto, Notification>>;
   addFavorite(
     id: string,
@@ -30,7 +29,7 @@ export interface CustomersServiceProtocol {
   ): Promise<Result<ResponseCustomerWithFavoriteDto, Notification>>;
   update(
     id: string,
-    data: UpdateCustomerDto,
+    data: CustomerDto,
   ): Promise<Result<ResponseCustomerDto, Notification>>;
   delete(id: string): Promise<Result<void, Notification>>;
 }

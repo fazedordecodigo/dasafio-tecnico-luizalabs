@@ -1,11 +1,10 @@
 import { Inject, Injectable, Logger } from '@nestjs/common';
 import {
   FavoriteDto,
-  CreateCustomerDto,
   GetAllDto,
   ResponseCustomerDto,
   ResponseCustomerWithFavoriteDto,
-  UpdateCustomerDto,
+  CustomerDto,
 } from '@domain/dtos';
 import {
   CustomersRepositoryProtocol,
@@ -116,7 +115,7 @@ export class CustomersService implements CustomersServiceProtocol {
   }
 
   public async create(
-    data: CreateCustomerDto,
+    data: CustomerDto,
   ): Promise<Result<ResponseCustomerDto, Notification>> {
     try {
       const customer = new Customer(data.name, data.email);
@@ -165,7 +164,7 @@ export class CustomersService implements CustomersServiceProtocol {
 
   public async update(
     id: string,
-    data: UpdateCustomerDto,
+    data: CustomerDto,
   ): Promise<Result<ResponseCustomerDto, Notification>> {
     try {
       const customer = new Customer(data.name, data.email, id);
