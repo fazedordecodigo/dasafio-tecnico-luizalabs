@@ -40,7 +40,11 @@ export class CustomersService implements CustomersServiceProtocol {
         return Result.error({ message: 'Customer not found' });
       }
       this._logger.log(`Customer found: ${customer.name}`);
-      return Result.ok(mapToDto(customer));
+      return Result.ok({
+        id: customer.id,
+        name: customer.name,
+        email: customer.email,
+      });
     } catch (error) {
       this._logger.error(`Error fetching customer: ${error.message}`);
       return Result.error({ message: 'Error fetching customer' });
