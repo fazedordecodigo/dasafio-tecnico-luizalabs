@@ -181,6 +181,10 @@ export class CustomersService implements CustomersServiceProtocol {
 
   public async delete(id: string): Promise<Result<void, Notification>> {
     try {
+      const customerExists = await this.getById(id);
+      if (customerExists.isError()) {
+        return Result.error({ message: 'Customer not exists' });
+      }
       await this._repository.delete(id);
       return Result.ok();
     } catch (error) {

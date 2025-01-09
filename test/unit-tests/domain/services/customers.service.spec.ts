@@ -6,11 +6,12 @@ import {
 import { CustomersService } from '@domain/services';
 import { faker } from '@faker-js/faker/locale/pt_BR';
 import { Test, TestingModule } from '@nestjs/testing';
-import { customerFaker } from '../fakers/customer.faker';
+import { customerFaker, customerFakerWithFavorites } from '../fakers/customer.faker';
 import { productFaker } from '../fakers/product.faker';
-import { Product } from '@domain/entities';
+import { Customer, Product } from '@domain/entities';
 import { mapToDto } from '@domain/mappers';
 import { Result } from 'typescript-result';
+import { _ } from '@faker-js/faker/dist/airline-BnpeTvY9';
 
 describe('CustomersService', () => {
   let sut: CustomersService;
@@ -49,6 +50,9 @@ describe('CustomersService', () => {
       await module.resolve<CustomersRepositoryProtocol>(CUSTOMER_REPOSITORY);
     productRepository =
       await module.resolve<ProductsRepositoryProtocol>(PRODUCT_REPOSITORY);
+    jest
+    .useFakeTimers()
+    .setSystemTime(new Date());
   });
 
   it('should be defined', () => {
@@ -351,6 +355,95 @@ describe('CustomersService', () => {
       const result = await sut.addFavorite(faker.string.uuid(), {
         id: productFaker.id,
       });
+      expect(result.error).toEqual(expected);
+    });
+  });
+
+  describe('update', () => {
+    it('should call repository.update with correct value', async () => {
+      const data = {
+        name: customerFaker.name,
+        email: customerFaker.email,
+      };
+      const expected = new Customer(customerFaker.name, customerFaker.email, customerFaker.id);
+      const spy = jest.spyOn(repository, 'update');
+      jest.spyOn(repository, 'update').mockResolvedValue(customerFaker);
+      await sut.update(customerFaker.id, data);
+      expect(spy).toHaveBeenCalledWith(expected);
+    });
+
+    it('should return customer if updated', async () => {
+      const expected = mapToDto(customerFaker);
+      jest.spyOn(repository, 'update').mockResolvedValue(customerFaker);
+      const result = await sut.update(faker.string.uuid(), {
+        name: faker.person.fullName(),
+        email: faker.internet.email(),
+      });
+      expect(result.value).toEqual(expected);
+    });
+
+    it('should return error if customer not found', async () => {
+      const expected = {
+        message: 'Customer not found',
+      };
+      jest.spyOn(repository, 'update').mockResolvedValue(null);
+      const result = await sut.update(faker.string.uuid(), {
+        name: faker.person.fullName(),
+        email: faker.internet.email(),
+      });
+      expect(result.error).toEqual(expected);
+    });
+
+    it('should return error if repository throws', async () => {
+      const expected = {
+        message: 'Error updating customer',
+      };
+      jest
+        .spyOn(repository, 'update')
+        .mockRejectedValue(new Error('Internal error'));
+      const result = await sut.update(faker.string.uuid(), {
+        name: faker.person.fullName(),
+        email: faker.internet.email(),
+      });
+      expect(result.error).toEqual(expected);
+    });
+  });
+
+  describe('delete', () => {
+    it('should call repository.delete with correct value', async () => {
+      const id = customerFaker.id;
+      jest.spyOn(sut, 'getById').mockResolvedValue(Result.ok(customerFakerWithFavorites));
+      const spy = jest.spyOn(repository, 'delete');
+      await sut.delete(id);
+      expect(spy).toHaveBeenCalledWith(id);
+    });
+
+    it('should return void if deleted', async () => {
+      jest.spyOn(sut, 'getById').mockResolvedValue(Result.ok(customerFakerWithFavorites));
+      jest.spyOn(repository, 'delete').mockResolvedValue(undefined);
+      const result = await sut.delete(faker.string.uuid());
+      expect(result.value).toBeUndefined();
+    });
+
+    it('should return error if customer not found', async () => {
+      const expected = {
+        message: 'Customer not exists',
+      };
+      jest.spyOn(sut, 'getById').mockResolvedValue(Result.error(expected));
+      jest.spyOn(repository, 'delete').mockResolvedValue(null);
+      const result = await sut.delete(faker.string.uuid());
+      expect(result.error).toEqual(expected);
+    });
+
+    it('should return error if repository throws', async () => {
+      const expected = {
+        message: 'Error deleting customer',
+      };
+      jest.spyOn(sut, 'getById').mockResolvedValue(Result.ok(customerFakerWithFavorites));
+      jest
+        .spyOn(repository, 'delete')
+        .mockRejectedValue(new Error('Internal error'));
+      const result = await sut.delete(faker.string.uuid());
       expect(result.error).toEqual(expected);
     });
   });
