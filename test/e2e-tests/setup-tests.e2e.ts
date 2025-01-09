@@ -32,18 +32,15 @@ beforeAll(async () => {
       },
     }
   });
-  console.log('connected to test db...');
 });
 
 afterAll(async () => {
   await prismaService.$disconnect();
   await postgresClient.end();
   await postgresContainer.stop();
-  console.log('test db stopped...');
 });
 
 beforeEach(async () => {
-  console.log("drop schema and create a new one");
   execSync(`npx prisma migrate reset --force`, {
     env: {
       ...process.env,
@@ -59,7 +56,6 @@ beforeEach(async () => {
 });
 
 afterEach(() => {
-  console.log("restore all mocks");
   jest.restoreAllMocks();
 });
 
