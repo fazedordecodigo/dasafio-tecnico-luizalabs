@@ -250,7 +250,9 @@ describe('CustomersService', () => {
         name: customerFaker.name,
         email: customerFaker.email,
       };
-      jest.spyOn(sut, 'getByEmail').mockResolvedValue(Result.error({ message: 'Customer not found' }));
+      jest
+        .spyOn(sut, 'getByEmail')
+        .mockResolvedValue(Result.error({ message: 'Customer not found' }));
       jest.spyOn(repository, 'create').mockResolvedValue(customerFaker);
       const result = await sut.create({
         name: customerFaker.name,
@@ -263,9 +265,7 @@ describe('CustomersService', () => {
       const expected = {
         message: 'Customer already exists',
       };
-        jest
-            .spyOn(sut, 'getByEmail')
-            .mockResolvedValue(Result.ok(customerFaker));
+      jest.spyOn(sut, 'getByEmail').mockResolvedValue(Result.ok(customerFaker));
       jest.spyOn(repository, 'create').mockResolvedValue(null);
       const result = await sut.create({
         name: faker.person.fullName(),
@@ -284,6 +284,72 @@ describe('CustomersService', () => {
       const result = await sut.create({
         name: faker.person.fullName(),
         email: faker.internet.email(),
+      });
+      expect(result.error).toEqual(expected);
+    });
+  });
+
+  describe('addFavorite', () => {
+    it('should call repository.getById with correct value', async () => {
+      const id = faker.string.uuid();
+      const favorite = {
+        id: faker.string.uuid(),
+      };
+      const spy = jest.spyOn(repository, 'getById');
+      await sut.addFavorite(id, favorite);
+      expect(spy).toHaveBeenCalledWith(id);
+    });
+
+    it('should return error if customer not found', async () => {
+      const expected = {
+        message: 'Customer not found',
+      };
+      jest.spyOn(repository, 'getById').mockResolvedValue(null);
+      const result = await sut.addFavorite(faker.string.uuid(), {
+        id: faker.string.uuid(),
+      });
+      expect(result.error).toEqual(expected);
+    });
+
+    it('should call productRepository.getById with correct value', async () => {
+      const id = faker.string.uuid();
+      const favorite = {
+        id: faker.string.uuid(),
+      };
+      const spy = jest.spyOn(productRepository, 'getById');
+      jest.spyOn(repository, 'getById').mockResolvedValue(customerFaker);
+      await sut.addFavorite(id, favorite);
+      expect(spy).toHaveBeenCalledWith(favorite.id);
+    });
+
+    it('should return error if product not exists', async () => {
+      const expected = {
+        message: 'Product not exists',
+      };
+      jest.spyOn(repository, 'getById').mockResolvedValue(customerFaker);
+      jest.spyOn(productRepository, 'getById').mockResolvedValue(null);
+      const result = await sut.addFavorite(faker.string.uuid(), {
+        id: faker.string.uuid(),
+      });
+      expect(result.error).toEqual(expected);
+    });
+
+    it('should return error if product already exists in favorites', async () => {
+      const expected = {
+        message: 'Product already exists in favorites',
+      };
+      const product = new Product(
+        productFaker.title,
+        productFaker.brand,
+        productFaker.price,
+        productFaker.image,
+        productFaker.id,
+      );
+      jest.spyOn(repository, 'getById').mockResolvedValue(customerFaker);
+      jest.spyOn(productRepository, 'getById').mockResolvedValue(productFaker);
+      customerFaker.addFavorite(product);
+      const result = await sut.addFavorite(faker.string.uuid(), {
+        id: productFaker.id,
       });
       expect(result.error).toEqual(expected);
     });
