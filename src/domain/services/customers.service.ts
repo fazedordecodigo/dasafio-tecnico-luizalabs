@@ -121,7 +121,7 @@ export class CustomersService implements CustomersServiceProtocol {
     try {
       const customer = new Customer(data.name, data.email);
       const customerExists = await this.getByEmail(customer.email);
-      if (customerExists.isOk) {
+      if (customerExists.isOk()) {
         return Result.error({ message: 'Customer already exists' });
       }
       const result = await this._repository.create(customer);
