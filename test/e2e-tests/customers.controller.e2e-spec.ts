@@ -84,12 +84,11 @@ describe('CustomersController (e2e)', () => {
         .post(`/customers/${process.env.ID_CUSTOMER_TO_GET_TEST_E2E}/favorites`)
         .auth(token, { type: 'bearer' })
         .send({ id: `${process.env.ID_PRODUCT_TO_POST_TEST_E2E}` })
-        .expect((response) => {
-          console.log(response.body);
-          expect(response.body).toHaveProperty('id');
-        })
         .expect(201)
-        .expect('Content-Type', /json/);
+        .expect('Content-Type', /json/)
+        .expect((response) => {
+          expect(response.body).toHaveProperty('id');
+        });
     });
 
     it('/customers/{id}/favorites (PATCH)', async () => {
@@ -97,12 +96,11 @@ describe('CustomersController (e2e)', () => {
         .patch(`/customers/${process.env.ID_CUSTOMER_TO_GET_TEST_E2E}/favorites`)
         .auth(token, { type: 'bearer' })
         .send({ id: `${process.env.ID_PRODUCT_TO_GET_TEST_E2E}` })
-        .expect((response) => {
-          console.log(response.body);
-          expect(response.body).toHaveProperty('id');
-        })
         .expect(200)
-        .expect('Content-Type', /json/);
+        .expect('Content-Type', /json/)
+        .expect((response) => {
+          expect(response.body).toHaveProperty('id');
+        });
     });
 
     it('/customers/{id} (PATCH)', async () => {
