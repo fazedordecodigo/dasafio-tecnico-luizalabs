@@ -9,7 +9,6 @@ import {
   BadRequestException,
   Inject,
   Query,
-  Put,
 } from '@nestjs/common';
 import {
   UpdateCustomerDto,
@@ -49,7 +48,7 @@ export class CustomersController {
     });
   }
 
-  @Put(':id/favorites')
+  @Patch(':id/favorites')
   public async removeFavorite(
     @Param('id') id: string,
     @Body() body: FavoriteDto,
