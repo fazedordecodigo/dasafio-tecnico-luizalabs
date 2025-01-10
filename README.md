@@ -1,6 +1,6 @@
 # 🚀 Desafio Luizalabs
 
-Este projeto é uma API para cadastro de clientes e lista de produtos favoritos, desenvolvida com NestJS e Prisma.
+Este projeto é uma API desenvolvida para gerenciar o cadastro de clientes e suas listas de produtos favoritos. A aplicação foi construída utilizando as tecnologias NestJS e Prisma, proporcionando uma estrutura robusta e eficiente para o desenvolvimento backend. A API permite o gerenciamento completo de dados dos clientes, como informações pessoais e preferências de produtos, com suporte para operações de CRUD (Create, Read, Update, Delete).
 
 ## 📋 Pré-requisitos
 
@@ -16,7 +16,7 @@ Este projeto é uma API para cadastro de clientes e lista de produtos favoritos,
     cd seu-repositorio
     ```
 
-2. Crie um arquivo  na raiz do projeto com as seguintes variáveis de ambiente:
+2. Crie um arquivo `.env` na raiz do projeto com as seguintes variáveis de ambiente:
 
     ```env
     DATABASE_URL='postgresql://user:xxx@postgres:5432/favorites_db?schema=public'
