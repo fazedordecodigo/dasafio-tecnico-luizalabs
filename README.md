@@ -13,7 +13,7 @@ Este projeto é uma API desenvolvida para gerenciar o cadastro de clientes e sua
 
     ```sh
     git clone https://github.com/fazedordecodigo/desafio-tecnico-luizalabs.git
-    cd seu-repositorio
+    cd desafio-tecnico-luizalabs
     ```
 
 2. Crie um arquivo `.env` na raiz do projeto com as seguintes variáveis de ambiente:
