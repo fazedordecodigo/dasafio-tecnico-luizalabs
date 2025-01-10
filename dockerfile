@@ -21,6 +21,8 @@ USER node
 COPY --chown=node:node --from=builder /app/node_modules ./node_modules
 COPY --chown=node:node --from=builder /app/dist ./dist
 COPY --chown=node:node --from=builder /app/package.json ./
+COPY --from=ghcr.io/ufoscout/docker-compose-wait:latest /wait /wait
 
+ENV WAIT_COMMAND="dumb-init node ./dist/src/main.js"
 EXPOSE 3000
-CMD ["dumb-init", "node", "./dist/src/main.js"]
+ENTRYPOINT [ "/wait" ]
